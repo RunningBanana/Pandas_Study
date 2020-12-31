@@ -1,0 +1,1447 @@
+https://github.com/teddylee777/machine-learning
+https://teddylee777.github.io/thoughts/%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B6%84%EC%84%9D-%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5-%EC%84%9C%EC%A0%81-%EC%B6%94%EC%B2%9C
+-> 머신러닝 공부법 및 순서
+https://www.zendesk.kr/blog/machine-learning-and-deep-learning/
+-> 머신러닝과 딥러닝의 차이
+https://www.youtube.com/watch?v=uM8pyX5Qb2w&list=PLaTc2c6yEwmq-3bSiCeaBJhE5Km5TKFhh&index=2
+-> Youtube 강의
+
+import tensorflow._api.v2.compat.v1 as tf
+tf.disable_v2_behavior()
+-> tesorflow 2.x 버전에서 1.x 코드 사용하기
+-----------------------------------------------------------------------
+머신러닝과 딥러닝의 차이
+머신러닝
+-"데이터를 구문 분석하고 해당 데이터를 통해 학습한 후 정보를 바탕으로 결정을 내리기 위해 
+학습한 내용을 적용하는 알고리즘"
+
+ex) 주문형 음악 스트리밍 서비스
+- 청취자의 선호 사항을 음악적 취향이 비슷한 다른 청취자와 연관시킵니다. 
+- 종종 간단히 AI라고 불리는 이 기술은 자동화된 추천을 제공하는 많은 서비스에서 사용됩니다.
+
+머신 러닝'이 가능하다는 말은 주어진 데이터로 기능을 수행하고, 시간이 지남에 따라 
+그 기능이 점차 향상됨을 의미합니다. 예를 들어 "어두워"라고 말할 때마다 불이 켜지는 손전등이
+ '어둠'이라는 단어가 포함된 다른 구절을 인식하는 것
+
+★머신러닝은 AI알고리즘이 부정확한 예측을 반환하면 엔니지어가 개입하고 조정해야한다.
+★딥러닝모델은 자체 신경망을 통해 예측의 정확성 여부를 스스로 판단 가능
+
+ex)
+머신러닝으로 STOP 표지판을 인식하려 하는 경우 학습하는 알고리즘 이외에도
+사람이 표지판의 위치를 잡는 기능, 글자 인식 기능 등을 손으로 코딩해주어야 한다.
+
+결론)
+● 머신 러닝은 알고리즘을 사용하여 데이터를 구문 분석하고 해당 데이터에서 학습하며, 
+학습한 내용에 따라 정보에 근거한 결정을 내립니다.
+-> 학습을 시키기 위해 데이터 삽입은 사람이 해주어야 하는 경우가 있다.
+     
+●딥 러닝은 알고리즘을 계층으로 구성하여 자체적으로 배우고 지능적인 결정을 내릴 수 있는 
+"인공 신경망"을 만듭니다.
+●딥 러닝은 머신 러닝의 하위 개념입니다. 둘 다 광범위한 인공 지능의 카테고리에 속하지만 
+인간과 가장 유사한 인공 지능을 구동하는 것은 딥 러닝입니다.
+
+* Supervised  Machine Learning 
+- 지도학습, 교수학습, 교사학습이라 번역되기도 하는 정답값이 있는 데이터를 학습시켜 예측하는 과정을 이해합니다.
+* Unsupervised  Machine Learning 
+- 정답값(label)이 없는 데이터를 군집화, 차원축소하는 기법에 대해 알아봅니다.
+* underfitting and overfitting 
+- 과적합과 과소적합을 알아봅니다.
+
+★Superviesed Machine learning
+- classification, regression
+training data와 training label이 존재
+label 값이 있다는 것은 정답값이 있다는 것
+ex) 스팸메일에 대해서 스팸인지 아닌지에 대한 모델을 만들고 학습을 시켜서
+testData로 예측을 한다. 이 결과에 대해 평가가 이루어진다. 
+
+Training Data + Training Labels -> Model
+Test DAta -> prediction
+Test Labels -> Evaluation
+
+clf = RandomForestClassifier()
+clf.fit(X_train, Y_train)
+y_pred = clf.predict(X_test)
+clf.score(X_test, Y_test)
+
+★Unsupervised Machine Learning
+- clustering, demesion reduction
+Label 값이 없음 = 정답이 없음
+Traning Data만 존재
+
+pca = PCA()
+pca.fit(X_train)
+X_new = pca.transform(X_test)
+
+Classification 분류
+- Preprocessing(전처리)
+Regression 회귀문제 (숫자가 많고 적음의 문제), 한달에 얼만큼의 스팸메일을 받을지 예측
+- Demensionality Reduction(차원축소)
+Clustering 군집화(메일의 카테고리를 분류해줌)
+- Feature selection, Feature extraction
+
+Grid Search
+- 학습을 할 때 최적의 hyper parameter를 찾는 것
+parameter들을 바꿔가며 여러번 학습시키면 Coss Validation
+한번만 학습시킨 경우면 Folder Validation
+
+스팸메일인지 분류를 할 때
+- 메일의 내용을 공백을 기준으로 Token화 시킨다.
+- that, you, I 같은 대명사, 접속어 같은 관련없는 용어들은 불용어(Stop word)
+- 특별히 그 특정메일에만 나오는 단어들에게 가중치를 부여 Tf idf 로 가중치 부여
+- 욕설인지 아닌지 탐지할 수 있음
+
+학습을 너무 안한 경우를 under fitting
+너무 많이 한 경우를 Over fitting
+가장 적절한 구간을 Sweet pot
+
+Desecion Tree는 Tree를 1개만 만들어서 계산
+Random Forests는 Tree를 여러개 만들어서 계산
+
+Grid Layout
+격자에서만 값을 찾는다.
+Random Layout
+랜덤하게 찾는다, 이것이 더 잘찾음
+-----------------------------------------------------------------------------------------------
+- tensorflow 는 그래프 기반으로 동작
+import tensorflow as tf를 통해 텐서플로를 import 하면 그 시점에 비어 있는 기본 그래프가 
+만들어지며, 우리가 만드는 모든 노드들은 이 기본 그래프에 자동으로 연결
+
+tf.constant(N) : N을 가지는 노드 생성
+tf.logical_and(a, b) : a&b, type은 반드시 tf.bool이어야 한다 
+tf.add(a, b) : a + b
+tf.pow(a, b) : a^b
+
+정의한 노드 및 연산그래프 실행시에는 세션(Session)
+ex)
+f = tf.subtract(d, e) # d-e
+sess = tf.Session()
+outs = sess.run(f)
+sess.close()
+print("outs = {}".format(outs)) # 5출력
+
+Session객체는 파이썬 객체와 데이터, 객체의 메모리가 할당되어 있는 실행 환경 사이를 연결
+연산 그래프를 실행하려면 Session객체의 run() 메소드를 사용해야한다.
+연산 수행이 완료되면 sess.close()를 통해 사용한 메모리를 해제하는 것이 좋다.
+
+import 하면 그래프가 자동으로 생성되지만 그래프를 따로 만들 수 있다.
+
+g = tf.Graph()
+print('default graph :', tf.get_default_graph())  # default graph 
+print('new graph :', g)  # new graph
+a = tf.constant(5)  # a 노드 생성
+print('a 노드가 g 그래프와 연결 되어 있나? :', a.graph is g) # False
+print('a 노드가 기본 그래프와 연결 되어 있나? :', a.graph is tf.get_default_graph()) # True
+
+-> 기본으로 만들어지는 graph와 만든 graph는 다른 객체임.
+
+# with 구문을 이용한
+# g2를 기본 그래프로 지정하기
+with g2.as_default():
+    print('g2가 기본 그래프인가? : ', g2 is tf.get_default_graph())
+
+with 구문은 코드실행이 시작할 때 설정이 필요하고 코드가 종료되는 시점에 해제가 된다.
+g2.as_default() : 해당 그래프를 기본 그래프로 지정
+
+★sess.run(f) 에서 run의 인자 f를 페치(fetch)라고 하며, 연산하고자 하는 그래프의 요소에 해당
+페치(fetch)는 하나의 노드 or 노드들로 이루어진 list
+
+// a,b,c,d,e,f는 각 하나의 그래프
+with tf.Session() as sess: # sess = tf.Session() 에 정의
+    fetches = [a, b, c, d, e, f]
+    outs = sess.run(fetches)
+
+print("outs = {}".format(outs))
+print(type(outs[0]))
+
+tensorflow에서 tf.add(), tf.multiply() 등으로 그래프에서 노드를 만들때 실제로 연산인스턴스 생성
+★생성된 연산인스턴스들은 그래프가 실행되기 전까지는 연산한 값을 반환하지 않는다
+계산된 결괄르 다른 노드로 전달할 수 있는 핸들, 흐름(flow)로 참조된다.
+이러한 핸들은 그래프에서 엣지(edge)라고 할 수 있으며, 텐서 객체(Tensor object)라고 한다.
+       (텐서 객체)
+연산 --------------> 연산
+
+세션이 실행되면 그래프에 텐서가 입력되고 연산이 수행된다.
+텐서플로의 텐서 객체는 name, shape, dtype 속성이 있어 해당 객체의 특징을 확인할 수 있다.
+
+데이터 타입
+데이터의 기본 단위는 숫자, 참거짓값(True, False), 스트링 요소
+
+tensor_a = tf.constant([[1, 2], [3, 4]], dtype=tf.float64)
+print(tensor_a) # 형식 출력
+print(tensor_a.dtype) # type출력
+
+데이터 타입
+tf.float32
+tf.float64
+tf.int8
+tf.int64
+tf.string
+tf.bool
+tf.qint32 # 양자화 연산에 사용되는 32비트 정수
+tf.quint7 # 양자화 연산에 사용되는 8비트 부호 없는 정수
+
+난수 생성
+난수생성은 텐서플로 변수의 초기값을 정의할 때 자주 사용되므로 주요
+형태(shape), 평균, 표준편차를 tf.random_normal()의 인자에 넣어주면 정규분포를 따르는 난수생성
+
+tf.linspace(start, end, num)
+-> start부터 ~end까지 숫자 중 같은 간격으로 num개 생성
+
+tf.InteractiveSession()은 연산 실행에 필요한 세션을 저장할 변수를 따로 지정하지 않아도 된다.
+sess = tf.InteractiveSession()
+
+# 0.0 ~ 4.0 을 같은 간격으로 5개 값 생성
+c = tf.linspace(0.0, 4.0, 5)
+print("The content of 'c': \n {}\n".format(c.eval()))
+sess.close()
+
+tf.constant(value) : 인수 value에 지정한 값 또는 값들로 채워진 텐서를 생성
+tf.fill(shape, value) : shape에 지정한 형태의 텐서를 만들고, value에 지정한 값으로 초기화
+tf.zeros(shape) : shape에 지정한 형태의 텐서를 모든 원소의 값 0 초기화
+tf.zeros_like(tensor) : tensor와 동일한 타입과 형태의 텐서를 만들고 0 초기화
+tf.ones(shape) : shape 에 지정한 형태의 텐서를 만들고 원소의 값 1 초기화
+tf.ones_like(tensor) : "
+tf.random_normal(shape, mean, stddev) : 정규분포를 따르는 난수를 생성(모양, 평균, 표준편차)
+tf.truncated_normal(shape, mean, stddev) : 절단정규분포(평균을 기준으로 표준편차보다 크거나
+작은 데이터를 제외)를 따르는 난수를 생성
+tf.random_uniform(shape, minval, maxval) : [minval, maxval) 구간의 균등분포의 값을 생성
+tf.random_shuffle(tensor) : 첫번째 차원에 따라 텐서를 무작위로 뒤섞음
+
+행렬곱
+tf.matmul(A, B)로 계산가능
+
+A = tf.constant([[1, 2],
+                   [3, 4]])
+
+B = tf.constant([[4, 3],
+                   [2, 1]])
+
+AB = tf.matmul(A, B)
+tf.InteractiveSession()
+print('matmul restlt:\n {}'.format(AB.eval()))
+
+이름
+텐서플로에서는 각 텐서 객체마다 고유의 이름을 가진다
+텐서 객체의 인자에 name을 사용해 이름을 지정
+
+with tf.Graph().as_default():
+      c1 = tf.constant(4, dtype=tf.float64, name='c')
+      c2 = tf.constant(4, dtype=tf.int32, name='c')
+      
+  print(c1.name)
+  print(c2.name)
+-> 텐서플로에서는 하나의 그래프 내의 객체는 동일한 이름을 가질 수 없다. 
+위의 코드와 같은 경우에는 c1과 c2 두 객체를 구분하기 위해 _숫자가 자동으로 붙는다.
+
+이름 스코프
+복잡한 그래프를 처리해야 하는 경우 이를 쉽게 추적하고 관리하기 위해서 노드를 이름별로 
+그룹화하여 묶는 것이 편리
+
+아래의 예제는 c2, c3를 prefix_name이라는 스코프로 그룹화한 것
+with tf.Graph().as_default():
+      c1 = tf.constant(4, dtype=tf.float64, name='c')
+      with tf.name_scope("prefix_name"):
+          c2 = tf.constant(4, dtype=tf.int32, name='c')
+          c3 = tf.constant(4, dtype=tf.float64, name='c')
+  ​
+  print('c1.name >>', c1.name)
+  print('c2.name >>', c2.name)
+  print('c3.name >>', c3.name)
+
+-> c2, c3 앞에 이름 prefix_name이 붙음
+
+변수
+텐서플로에서 최적화 과정(가중치 조정)에서 변수(Variable)라는 객체를 사용한다.
+변수는 세션이 실행될 때 마다 그래프에서 고정된 상태를 유지
+변수의 사용은 2단계로 나뉜다.
+
+1. tf.Variable()함수를 사용해 변수를 만들고 어떤 값으로 초기화할지를 정의한다.
+
+★2. tf.global_variables_initializer() 메소드를 사용하여 세션에 초기화 연산을 수행해야 하며, 
+변수에 메모리를 할당하고 초기값을 설정하는 역할을 한다.
+
+init_val = tf.random_normal((1, 5), 0, 1)
+var = tf.Variable(init_val, name='var')
+print("pre run: \n{}".format(var))
+
+init = tf.global_variables_initializer()
+with tf.Session() as sess:
+    sess.run(init)
+    post_var = sess.run(var)
+
+print('\npost run: \n{}'.format(post_var))
+
+-> 세션을 초기화 후 sess.run(f)를 진행한다.
+
+플레이스 홀더
+텐서플로에서는 입력값을 넣어주기 위해 플레이스홀더(placeholder)
+플레이스홀더는 데이터를 입력받는 비어있는 변수라고 생각
+먼저 그래프를 구성하고, 그 그래프가 실행되는 시점에 입력 데이터를 넣어주는 데 사용한다.
+플레이스홀더는 shape 인수를 유동적으로 지정할 수 있다. 
+예를 들어, None으로 지정되면 이 플레이스홀더는 모든 크기의 데이터를 받을 수 있다.
+배치단위(batch size)의 샘플 데이터 개수에 해당하는 행은 None, 열은 Feature의 길이 고정된 값 사용
+
+ex) ph = tf.placeholder(tf.float32, shape=(None, 10))
+
+★플레이스홀더 정의 시 반드시 그래프 실행단계 전에 입력값을 넣어줘야함
+그렇지 않으면 에러가 나타난다.
+★입력데이터는 딕셔너리 형태로 session.run() 메소드에 전달
+key는 변수이름, value는 list 또는 Numpy배열
+
+★★
+tf.random.randint(시작, n) : 시작~n-1까지 랜덤숫자 1개
+tf.random.rand(m, n) : 0~1의 균일분포 표준정규분포 난수를 matrix array(m, n) 생성
+tf.random.randn(m, n) : 평균0, 표준편차1의 가우시안 표준정규분포 난수를 matrix(m, n) 생성
+
+★입력 데이터는 딕셔너리(dictionary)형태로 session.run()메소드를 통해 전달된다.
+sess.run(s, feed_dict={ph: data})
+ex) outs = sess.run(s, feed_dict={x: x_data, w: w_data})
+
+tf.reduce_all: 설정한 축으로 이동하면서 and논리 연산을 수행한다.
+tf.reduce_any: 설정한 축으로 이동하면서 or논리 연산을 수행한다.
+tf.reduce_mean: 설정한 축의 평균을 구한다.
+tf.reduce_max: 설정한 축의 최댓값을 구한다.
+tf.reduce_min: 설정한 축의 최솟값을 구한다.
+tf.reduce_prod: 설정한 축의 요소를 모두 곱한 값을 구한다.
+tf.reduce_sum: 설정한 축의 요소를 모두 더한 값을 구한다.
+
+tf.matmul: 내적
+tf.linalg.inv: 역행렬
+
+★최적화
+모델을 최적화하기 위해서는 모델의 성능을 평가할 수 있는 척도가 필요하다.
+모델이 예측한 값과 관측값 사이의 불일치 정도를 확인하기 위해 '거리' 사용 = 손실(loss)
+이 함수의 값을 최소화하는 Parameter(가중치)를 찾아내는 것이 최적화
+
+평균제곱오차(MSE) 
+= 모든 데이터 샘플에서 실제 관측값과 모델 예측값 사이의 차를 제곱한 값의 평균
+ex)
+loss = tf.reduce_mean(tf.square(y_true - y_pred))
+  # OR
+loss = tf.losses.mean_squared_error(y_true, y_pred)
+
+교차 엔트로피(Corss Entropy)
+★교차 엔트로피는 주로 범주형 데이터에 사용되는 손실함수
+
+loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=y_true, logits_y_pred)
+loss = tf.reduce_mean(loss)
+
+교차엔트로피는 두 분포사이의 유사성을 측정하는 척도
+두 분포가 가까울수록 교차 엔트로피 값은 더 작아진다.
+
+★경사하강법
+손실의 경사를 이용한 경사하강법
+
+optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+train = optimizer.minimize(loss)
+
+tf.tranpose(x) : x의 전치행렬(행과 열을 바꿈 5x3 -> 3x5)
+
+★로지스틱 회귀
+로지스틱 회귀에서는 W^t * x + b 인 선형성분은 로지스틱 함수인 비선형함수의 입력이 되며
+이 함수의 결과값은 [0, 1] 사이이다.
+
+loss = tf.reduce_mean(tf.square(y_true - y_pred)) # MSE
+MSE 대신 
+loss =tf.nn.sigmoid_cross_entropy_with_logits(labels=y_true, logits=y_pred)
+시그모이드 함수 사용하면 된다.
+---------------------------------------------------------------------------------------------
+K means 알고리즘
+1. 중심에 가까운 데이터를 클러스터에 포함시킨다
+2. 중심을 클러스터의 중앙으로 이동시킨다
+3. 1,2 과정을 반복하고 변화가 없으면 종료
+위와 같은 방법에서 궁금한건 초기 중심값 설정이다. 수동으로 지정할 수 있고 
+K means++ 알고리즘을 사용할 수도있다.
+
+K means++ : 자동으로 적절한 클러스터의 중심 위치를 찾아주는 알고리즘
+1. 초기 특정 노드를 선택하여 중심으로 설정
+2. 선택한 노드에서 가장 먼 노드를 선택하여 다른 클러스터의 중심으로 설정
+3. 이미 선택된 노드중심들로부터 가장 먼 노드를 다른 클러스터의 중심으로 설정
+
+파이썬 빅데이터 분석에 있어 가장 많이 활용되는 라이브러리
+1. Numpy : 연산 처리를 용이하게 하기 위해 사용
+2. Pandas : 데이터 포인트를 만들기 위해 사용
+3. Matplotlib : 데이터 시각화를 위해 사용
+
+완전연결 신경망은 이름에서도 알 수 있듯이 각 유닛(뉴런)이 앞 계층의 모든 유닛과 연결되어 
+있다. 
+반면, 합성곱 계층에서는 각각의 유닛은 이전 계층에서 근접해 있는 몇 개의 유닛들에만 연결된다.
+또한 모든 유닛은 이전 계층에 동일한 방법으로 연결되어 있으므로 같은 값의 가중치와 구조를 
+공유한다. 
+그리고 이 연결 사이에 합성곱 연산이 들어 있어 이 신경망을 합성곱 신경망이라 부른다.
+
+합성곱 구조는 하나의 정규화(regularization) 과정이라고 볼 수 있다. 
+정규화(Regularization)은 머신러닝이나 통계학에서 주로 정답의 복잡도에 패널티를 가해 
+최적화 문제에 제한을 두는 것을 말하며, 이주어진 데이터에 오버피팅(overfitting)을 
+방지하기위해 사용된다. 합성곱(convolution) 계층은 정해진 크기의 합성곱 보통 매우 
+작은 합성곱의 크기로 자유도(degree of freedom)를 줄인다.
+
+합성곱 계층 다음에는 풀링을 하는 것이 일반적이다. 
+풀링(pooling)은 각 특징맵 내에서 집계 함수(평균/최대값)를 사용해 데이터의 크기를 
+줄이는 것을 의미한다.
+풀링의 이론적 측면은 계산된 특징이 이미지 내의 위치에 대한 영향을 덜 받기 때문이다.
+불변성을 찾아내서 공간적 변화를 극복할 수 있다.
+
+모델에 필요한 마지막 요소는 드롭아웃(Dropout)
+정규화를 위한 트릭이며 임의의 뉴런을 무작위로 선택에 선택된 뉴런들을 제외하고 학습시킨다
+
+활성화 함수는 출력 값을 인공 신경망에 적합하게 바꾸어주는 역할을 수행
+가장많이 사용되는 함수로 시그모이드, ReLU가 있다.
+
+데이터를 오른쪽으로만 전달하면 데이터의 최적화가 잘 이루어지지 않는다.
+★결과값에서 오차가 발생하면 해당 오차만큼 앞쪽으로 다시 전파시키면서 가중치를 갱신하는 
+기술이 역전파 라고한다.
+
+MNIST(National Institute of Standards and Technology database)
+: 사람이 손으로 쓴 숫자들로 이루어진 거대 데이터베이스
+
+다변인 선형회귀
+: 모델에 영향을 미치는 변인이 여러 개 일 때 사용하는 모델입니다. 
+현재 우리의 데이터에서는 변인이 '평균 온도', '최저 온도', '최고 온도', '강수량'이므로 
+이 모든 변인이 '가격'에 영향을 미친다고 감안
+---------------------------------------Pandas------------------------------------------------------
+시리즈
+시리즈는 데이터가 순차적으로 나열된 1차원 배열의 형태
+{key, value} 형태를 가진 딕셔너리와 비슷한 구조를 가진다
+
+시리즈 만들기
+딕셔너리->시리즈 변환 : pandas.Series(딕셔너리)
+인덱스 배열 : Series객체.index
+데이터값 배열 : Series객체.values
+
+판다스 Series()함수를 사용하여 파이썬 리스트를 시리즈로 변환가능
+단, 딕셔너리의 키처럼 인덱스로 변환할 값이 없으므로 별도로 정의하지 않으면 0부터 자동지정
+
+원소선택에 있어서는 대괄호[] 안에 index가 정수라면 정수, 문자라면 문자를 입력하면 된다.
+
+튜플(tuple) 또한 Series 함수로 지정이 가능하다.
+리스트처럼 딕셔너리의 키 값이 없으므로 정수형 위치 인덱스가 자동 지정된다
+
+인덱스를 사용할 때 sr[1 : 2] 처럼 사용하면 2는 포함되지 않음
+그러나 sr['생년월일' : '성별'] 과 같이 인덱스 이름 사용시 범위끝 '성별' 포함된다
+
+데이터 프레임
+- 데이터 프레임은 2차원 배열
+- Excel과 관계형 데이터베이스(RDBMS) 등 다양한 분야에서 사용된다.
+- 열은 공통의 속성을 갖는 일련의 데이터를 나타낸다.
+- 행은 관측대상에 대한 다양한 속성 데이터들의 모음인 레코드가 된다.
+- 즉 RDBMS의 table에 대한 행열과 비슷하다고 보면 된다.
+
+딕셔너리->데이터프레임 변환 : pandas.DataFrame(딕셔너리 객체)
+★딕셔너리의 키가 column header가 되고, 값에 해당하는 리스트가 데이터 프레임의 열이 된다.
+행 인덱스에는 정수형 위치 인덱스가 자동 지정된다.
+ex)
+dict_data = {'c0': [1, 2, 3], 'c1': [4, 5, 6], 'c2': [7, 8, 9], 'c3': [10, 11, 12], 'c4': [13, 14, 15]}
+->
+   c0  c1  c2  c3  c4
+0   1   4   7  10  13
+1   2   5   8  11  14
+2   3   6   9  12  15
+
+- 2차원 배열 형태의 데이터를 데이터 프레임으로 변환하기 쉽다
+pandas.DataFrame(2차원 배열, 
+			index = 행 인덱스 배열,
+			columns = 열 이름 배열)
+ex)
+df = pd.DataFrame([[15, '남', '덕영중'], ['17', '여', '수리중']], 
+		index=['준서', '예은'], 
+		columns=['나이', '성별', '학교'])
+print(df)
+->
+       나이 성별   학교
+준서  15  남  덕영중
+예은  17  여  수리중
+
+DataFrame 객체.index = 새로운 행 인덱스 배열
+DataFrame 객체.columns = 새로운 열 이름 배열
+이와 같이 기존의 DataFrame의 index와 columns 변경 가능하다.
+
+데이터 프레임에 rename 메소드를 적용하여 행 인덱스 또는 열 이름의 일부를 선택하여 변경가능
+DataFrame 객체.rename(index={기존 인덱스:새로운 인덱스, ...})
+DataFrame 객체.rename(columns={기존 이름:새이름, ...})
+-★여기서 원본 객체를 변경하려면 inplace=True 옵션을 사용
+
+행/열 삭제
+- 행 또는 열을 삭제하는 명령으로 drop()메소드가 있다.
+- 행을 삭제할 때는 축 옵션으로 axis=0 또는 입력하지 않아도 된다.
+- axis=1을 입력하면 열을 삭제한다.
+- 여러개의 행 또는 열을 삭제하려면 리스트 형태로 입력
+- drop() 메소드는 기존 객체를 변경하지 않고 새로운 객체를 반환하는 점에 유의
+- 따라서 기존 객체를 변경하기 위해서는 inplace=True 옵션 추가
+
+행삭제 : DataFrame 객체.drop(행 인덱스 또는 배열, axis=0)
+열삭제 : DataFrame 객체.drop(열 이름 또는 배열, axis=1)
+
+★행 선택
+- 데이터프레임의 행 데이터를 선택하기 위해서는 loc, iloc 인덱서를 사용한다
+- 이름을 기준으로 선택시에 loc 이용(범위의 끝 포함)
+- 정수형 위치 인덱서를 사용할때는 iloc 이용(범위의 끝 제한)
+ex)
+label1 = df.loc['서준']
+position1 = df.iloc[0]
+print(label1)
+print('\n')
+print(position1)
+->
+수학     90
+영어     98
+음악     85
+체육    100
+
+열 선택
+열1개 선택할때 : DataFrame 객체["열 이름"] 또는 DataFrame 객체.열 이름
+-> 시리즈 객체가 반환된다.
+
+열 n개 선택 : DataFram 객체[[열1, 열2, 열3, ...., 열n]]
+-> 데이터프레임 객체가 반환된다.
+
+범위 슬라이싱: DataFrame 객체.iloc[시작 인덱스 : 끝 인덱스 : 슬라이싱 간격]
+- 슬라이싱 간격에 -1 입력시 역순으로 인덱싱 한다.
+
+원소 선택
+- 인덱스 이름 : DataFrame 객체.loc[행 인덱스, 열 이름]
+- 정수 위치 인덱스 : DataFrame 객체.iloc[행 번호, 열 번호]
+ex)
+c = df.loc[['서준', '인아'], ['음악', '체육', '수학']]
+d = df.iloc[0:2, 2:]
+print(c)
+
+# '이름' 열을 새로운 인덱스로 지정하고 df 객체에 변경 사항 반영
+df.set_index('이름', inplace=True) 
+
+열 추가
+- DataFrame 객체['추가하려는 열 이름'] = 데이터 값
+이때 모든 행에 동일한 값이 입력된다.
+그래서 df['국어'] = [60, 70, 80] 방식으로 삽입해주면 된다.
+
+행 추가
+- DataFrame 객체.loc['새로운 행 이름'] = 데이터 값(또는 배열)
+
+원소 값 변경
+- 특정 원소를 선택하고 새로운 데이터 값을 지정해주면 원소 값이 변경된다.
+- 1개또는 여러개 원소값을 변경할 수 있다.
+- DataFrame 객체의 일부분 또는 원소를 선택 = 새로운 값
+
+행, 열의 위치 바꾸기
+- NumPy에서 유래한 행렬 전치 메소드와 속성을 사용한다.
+- 전치의 결과로 새로운 객체를 반환하므로 기존 객체 변경하기 위해서 새로 지정해야함
+- DataFrame 객체.transpose() 또는 DataFrame 객체.T
+
+인덱스 활용
+특정 열을 행 인덱스로 설정
+- 원본 데이터 프레임을 바꾸지 않고 새로운 데이터프레임 객체를 반환하는 점에 유의
+- DataFrame 객체.set_index(['열 이름'] 또는 '열 이름')
+
+행 인덱스 재배열
+- reindex() 메소드를 사용하면 데이터프레임의 행 인덱스를 새로운 배열로 재지정 할 수 있다
+- 기존 객체를 변경하지 않고 새로운 데이터프레임 객체를 반환한다
+- DataFrame 객체.reindex(새로운 인덱스 배열)
+ex)
+new_index = ['r0', 'r1', 'r2', 'r3', 'r4']
+ndf2 = df.reindex(new_index, fill_value=0)
+->
+    c0  c1  c2  c3  c4
+r0   1   4   7  10  13
+r1   2   5   8  11  14
+r2   3   6   9  12  15
+r3   0   0   0   0   0
+r4   0   0   0   0   0
+
+행 인덱스 초기화
+- reset_index() 메소드를 활용하여 행 인덱스를 정수형 위치 인덱스로 초기화한다.
+- 기존의 행 인덱스는 열로 이동한다.
+- 새로운 데이터프레임 객체를 반환한다.
+ex)
+ndf = df.reset_index()
+
+행 인덱스를 기준으로 데이터프레임 정렬
+- sort_index() 메소드를 활용하여 행 인덱스를 기준으로 데이터프레임의 값을 정렬
+- ascending 옵션을 사용하여 오름차순 또는 내림차순을 설정한다.
+- DataFrame 객체.sort_index()
+ex)
+ndf = df.sort_index(ascending=False)
+
+특정 열의 데이터 값을 기준으로 데이터프레임 정렬하기
+열 기준정렬 : DataFrame 객체.sort_values()
+ndf = df.sort_values(by='c1', ascending=False)
+
+산술연산
+- 판다스 객체의 산술연산은 내부적으로 3단계 프로세스를 거친다.
+- 행/열 인덱스 기준으로 모든 원소를 정렬한다.
+- 동일한 위치에 있는 원소끼리 일대일로 대응시킨다.
+- 일대일 대응이 되는 원소끼리 연산 처리한다. 대응되는 원소가 없으면 NaN으로 처리
+
+시리즈 연산
+시리즈 vs 숫자
+- 시리츠 객체에 연산을 하면 계산한 결과를 시리즈 객체로 반환한다.
+- 덧셈, 뺄셈, 곱셈, 나눗셈 모두 가능
+- Series객체 + 연산자 + 숫자
+
+시리즈 vs 시리즈
+- 시리즈의 모든 인덱스에 대하여 같은 인덱스를 가진 원소끼리 계산
+- 연산 결과를 매칭하여 새 시리즈 반환
+- Series1 + 연산자 + Series2
+- 대응 되는 값이 없거나 양쪽 인덱스에 모두 존재하는 것이 아니면 값은 NaN
+
+연산 메소드
+- 객체 사이에 공통 인덱스가 없거나 NaN이 포함된 경우 연산결과는 NaN으로 반환된다.
+- 연산메소드에 fill_value 옵션을 설정하면 NaN대신 설정한 값으로 계산한다.
+- Series1.add(Series2, fill_value=0)
+
+데이터프레임 연산
+데이터프레임 vs 숫자
+- 데이터프레임에 어떤 숫자를 더하면 모든 원소에 숫자를 더한다.
+- 덧셈, 뺄셈, 곱셈, 나눗셈 모두 가능
+- 데이터프레임과 숫자 연산 : DataFrame 객체 + 연산자 + 숫자
+ex)
+titanic = sns.load_dataset("titanic")
+df = titanic.loc[:, ['age', 'fare']]
+addition = df + 10
+print(addition.head())
+
+데이터프레임 vs 데이터프레임
+- 각 데이터프레임의 같은 행, 같은 열 위치에 있는 원소끼리 계산한다.
+- DataFrame1 + 연산자 + DataFrame2
+
+외부 파일 읽어오기
+File Format	Reader		Writer
+CSV		read_csv		to_csv
+JSON		read_json		to_json
+HTML		read_html	to_html
+Local clipboard	read_clipboard	to_clipboard
+MS Excel		read_excel	to_excel
+HDF5 Format	read_hdf		to_hdf
+SQL		read_sql		to_sql
+
+CSV 파일
+- 데이터 값을 쉼표(,)로 구분하고 있는 의미 CSV(comma-separated values) 텍스트 파일
+- CSV 파일->데이터프레임 : pandas.read_csv("파일 경로(이름)")
+- read_csv() 함수의 header 옵션은 데이터프레임의 열 이름으로 사용할 행을 지정한다.
+- 파일명을 포함하여 정확한 파일 경로를 read_csv() 함수의 인자로 전달한다.
+-★header 옵션이 없으면 csv파일의 첫 행의 데이터가 열 이름이 된다.
+-★index_col 옵션을 지정하지 않으면 행 인덱스는 정수가 0,1,2가 자동으로 지정된다.
+- CSV파일에는 쉼표 대신 탭\n이나 공백으로 텍스트를 구분하기도 한다.
+이때는 구분자(sep 또는 delimiter) 옵션을 알맞게 입력해야 한다.
+
+옵션
+path : 파일의 위치(파일명 포함)
+sep : 텍스트 데이터를 필드별로 구분하는 문자
+header : 열 이름으로 사용될 행의 번호(기본값은 0) 첫행부터 데이터라면 None으로 지정가능
+index_col : 행 인덱스로 사용할 열의 번호 또는 열 이름
+names : 열 이름으로 사용할 문자열의 리스트
+skiprows : 처음 몇줄을 skip할 것인지 설정(숫자입력)
+	skip하려는 행의 번호를 담은 리스트로 설정가능(ex [1, 3, 5])
+
+Excel 파일
+- Excel 파일의 행과 열은 데이터프레임의 행, 열로 일대일 대응된다.
+- header, index_col 대부분의 옵션을 그대로 사용할 수 있다.
+- Excel파일 -> 데이터프레임 : pandas.read_excel("파일 경로")
+
+JSON 파일
+- JSON파일은 데이터 공유를 목적으로 개발된 특수한 파일 형식
+- 파이썬 딕셔너리와 비슷하게 'key : value' 구조를 갖는데, 구조가 중첩되는 방식에 따라 옵션을
+다르게 적용한다.
+- JSON파일 -> 데이터프레임 : pandas.read_json("파일 경로")
+
+웹에서 가져오기
+HTML 웹 페이지에서 표 속성 가져오기
+- 판다스 read_html 함수는 HTML 웹 페이지에 있는 <table>태그에서 표 형식의 데이터를
+모두 찾아서 데이터프레임으로 변환한다. 표 데이터들은 별도의 데이터프레임으로 변환되기 때
+문에 여러개의 데이터프레임을 원소로 갖는 리스트가 반환된다.
+
+웹페이지의 표 정보를 파싱하려면 HTML 웹페이지의 주소(URL)을 따욤포 안에 입력한다.
+- pandas.read_html("웹주소 또는 HTML파일 경로"_
+
+웹 스크래핑
+- BeautifulSoup 등 웹 스크래핑 도구로 수집한 데이터를 판다스 데이터프레임으로 정리하는 방법
+- 스크래핑한 내용을 파이썬 리스트, 딕셔너리 등으로 정리한 뒤 DataFrame() 함수에 리스트나
+딕셔너리 형태로 전달하여 데이터프레임으로 변환한다.
+
+데이터베이스에서 판다스로 데이터를 가져올 수 있을까?
+read_sql() 함수를 이용하면 SQL 쿼리를 가지고 데이터베이스로부터 데이터를 불러올 수 있다.
+이때 읽어온 데이터는 데이터프레임 포맷으로 저장된다.
+
+API 활용하여 데이터 수집하기
+구글 지오코딩 : 장소 이름 또는 주소를 입력하면 위도와 경도 좌표 정보를 변환해주는 서비스
+서비스를 이용하려면 사용자 인증 후에 API키를 발급받아야 한다.
+
+CSV 파일로 저장
+- 판다스 데이터프레임은 2차원 배열 데이터이기 때문에 CSV파일로 변환할 수 있다.
+- to_csv() 메소드를 사용하면 된다.
+- DataFrame 객체.to_csv("파일 이름")
+ex)
+data = {'name': ['Jerry', 'Riah', 'Paul'], 'algol': ['A', 'A+', 'B'], 'basic': ['C', 'F', 'D+'],
+        'c++': ['B+', 'C', 'C+']}
+df = pd.DataFrame(data)
+df.to_csv('./df_sample.csv')
+
+JSON 파일로 저장
+- 데이터 프레임을 JSON 파일로 저장하려면 to_json() 메소드를 이용
+- DataFrame 객체.to_json("파일 이름")
+
+Excel 파일로 저장
+- to_excel() 메소드 이용
+- 단, to_excel() 메소드를 사용하려면 openpyxl 라이브러리를 사전에 설치해야 한다.
+
+여러개의 데이터프레임을 하나의 Excel 파일로 저장
+- 판다스 ExcelWriter() 함수는 Excel 워크북 객체를 생성한다.
+- 워크북 객체는 알고 있는 Excel 파일이다.
+- to_excel() 메소드를 적용할 때 삽입하려는 워크북 객체를 인자로 전달한다.
+- sheet_name 옵션에 시트 이름을 입력하여 삽입되는 시트 위치 지정 가능
+- 시트 이름을 다르게 하면 같은 Excel파일의 서로 다른 시트에 구분하여 저장한다.
+ex)
+writer = pd.ExcelWriter('./df_excelwriter.xlsx')
+df1.to_excel(writer, sheet_name='bear1')
+df2.to_excel(writer, sheet_name='bear2')
+writer.save()
+
+데이터 구조
+- head() 메소드는 데이터프레임의 앞 부분 일부 내용을 출력
+- 데이터셋의 내용과 구조를 개략적으로 살펴보기 좋다.
+- 마지막 부분의 내용을 보고 싶다면 tail 메소드 사용
+- DataFrame 객체.head(n) # 디폴트값 5
+★★
+# header를 None로 받은 뒤 열을 직접 지정해도 된다. 
+# 이후 set_index가 필요할 경우 지정한 열 중 선택해서 하면 된다.
+df = pd.read_csv('./auto-mpg.csv', header=None)
+df.columns = ['mpg', 'cylinders', 'displacement', 'horsepower', 'weight',
+              'acceleration', 'model year', 'origin', 'name']
+
+데이터 요양 정보 확인하기
+데이터프레임의 크기 확인: DataFrame 객체.shape
+ex) print(df.shape)
+
+데이터프레임의 기본 정보 출력
+- 클래스 유형, 행인덱스의 구성, 열 이름의 종류와 개수, 각 열의 자료형과 개수 포함된다.
+- DataFrame 객체.info()
+- 자료형은 df.dtypes 로도 확인이 가능하다(메소드 아님)
+
+데이터프레임의 기술 통계 정보 요약
+- 데이터 프레임에 describe() 메소드 적용하면, 평균, 표준편차, 최대값, 최소값, 중간값 출력
+- DataFrame 객체.describe()
+- 산술데이터가 아닌 열에 대한 정보를 포함하려면 include='all' 옵션 추가
+
+데이터 개수 확인
+- info() 메소드는 화면에 각 열의 데이터 개수 정보를 출력하지만 반환 해주는 값이 없어서
+다시 사용하는 어려움이 있다.
+- count()는 각 열이 가지고 있는 데이터 개수를 시리즈 객체로 반환
+- DataFrame 객체.count()
+
+각 열의 고유값 개수
+- value_count() 메소드는 시리즈 객체의 고유값 개수를 세는데 사용
+- 데이터프레임의 열은 시리즈이므로 value_count() 메소드로 각 열의 고유값 종류와 개수 확인
+- 고유값이 행 인덱스, 고유값의 개수가 데이터 값이 되는 시리즈 객체 생성
+- dropna=True 옵션 설정시 데이터 값 중에서 NaN 제외 계수를 센다
+- 기본은 dropna=False
+- DataFrame 객체["열 이름"].value_counts()
+
+통계 함수 적용
+평균값
+- 데이터프레임에 mean() 메소드를 적용하면 모든 열의 평균값을 각각 계산하여 시리즈객체 반환
+- 특정 열을 선택하여 평균값을 계산할 수도 있다.
+- 모든 열의 평균값: DataFrame 객체.mean()
+- 특정 열의 평균값: DataFrame 객체["열 이름"].mean()
+
+중간값
+- 모든 열의 중간값: DataFrame 객체.median()
+- 특정 열의 중간값: DataFrame 객체['열 이름'].median()
+
+최대값
+- 모든 열의 최대값: DataFrame 객체.max()
+- 특정 열의 최대값: DataFrame 객체['열 이름'].max()
+
+최소값
+- 모든 열의 최소값: DataFrame 객체.min()
+- 특정 열의 최소값: DataFrame 객체['열 이름'].min()
+
+표준편차
+- 모든 열의 표준편차: DataFrame 객체.std()
+- 특정 열의 표준편차: DataFrame 객체['열 이름'].std()
+
+상관계수
+- 모든 열의 상관계수: DataFrame 객체.corr()
+- 특정 열의 상관계수: DataFrame 객체[열 이름의 리스트].corr()
+
+판다스 내장 그래프 도구 활용
+- 판다스는 Matplotlib 라이브러리 기능을 일부 내장하고 있다.
+- 시리즈 또는 데이터프레임 객체에 plot()메소드를 적용하여 그래프를 그린다.
+- kind() 옵션으로 그래프의 종류를 선택할 수 있다.
+
+kind 옵션
+line 선그래프		kde 커널 밀도 그래프
+bar 수직막대그래프	area 면적 그래프
+barh 수평막대그래프	pie 파이 그래프
+his 히스토그램		scatter 산점도 그래프
+box 박스 플롯		hexbin 고밀도 산점도 그래프
+
+- Default 값은 line으로 선그래프이다.
+- 선그래프: DataFrame 객체.plot()
+- header=None 안할 시 헤더로 지정한 다음 행부터 index가 0임
+- df_ns.columns = df_ns.columns.map(int) # 열 이름의 자료형을 정수형으로 변경
+- 연도 값을 x축으로 바꾸기 위해 열 이름을 구성하고 있는 연도 값이 행 인덱스에 위치하도록
+행렬을 전치해야 한다.  ex) DataFrame 객체.transpose() 또는 T
+
+막대 그래프
+- DataFrame.plot(kind='bar')
+
+히스토그램
+- DataFrame.plot(kind='hist')
+- 그래프의 y축값은 빈도가 출력이 된다.
+
+산점도
+- kind='scatter'
+- 비교할 두 변수를 선택하여 x축과 y축으로 지정한다.
+ex)
+df.columns = ['mpg','cylinders','displacement','horsepower','weight',
+              'acceleration','model year','origin','name']
+
+# 2개의 열을 선택하여 산점도 그리기
+df.plot(x='weight',y='mpg', kind='scatter')
+
+박스 플롯
+- 박스 플롯은 특정 변수의 데이터 분포와 분산 정도에 대한 정보를 제공
+- kind='box'
+- 변수들의 데이터가 퍼져있는 정도를 확인할 때 사용
+
+시각화 도구
+Matplot libaray 사용
+- header=0 옵션과 같이 column header가 될 행을 지정할 수 있다.
+ex) df = pd.read_excel('시도별 전출입 인구수.xlsx', header=0)
+
+-★fillna() 메소드의 method='ffill' 옵션 사용시 누락데이터가 들어있는 행의 바로 앞에 위치한
+행의 데이터 값으로 채운다.
+- Boolean 값을 Series 배열에 담은 뒤 index에 대입하면 True에 해당하는 행이 저장된다.
+ex)
+mask = (df['전출지별'] == '서울특별시') & (df['전입지별'] != '서울특별시')
+df_seoul = df[mask]
+
+- 선그래프는 plt.plot() 으로 사용
+- x축데이터, y축데이터 순서로 넣는다
+ex)
+plt.plot(sr_one.index, sr_one.values)
+
+차트 제목, 축 이름 추가
+- title 함수를 사용한다.
+- x축 이름은 xlabel() 함수를 이용, y축 이름은 ylabel() 함수를 활용하여 추가
+
+그래프 꾸미기
+- x축 눈금 라벨의 글씨가 서로 겹쳐 잘 보이지 않는 문제를 해결해보자.
+- 글씨가 들어갈 수 있는 공간 확보하는 두가지 방법
+- 첫째, 공간을 만들기 위해 figure() 함수로 그림틀의 가로 사이즈를 더 크게 설정
+- 둘째, xticks() 함수를 활용하여 x축 눈금 라벨을 반시계 방향으로 90도 회전하여 안겹치게 한다.
+★반드시 figure(figsize=())를 지정할때 plt.plot() 메소드 전에 해야 한다.
+ex)
+plt.figure(figsize=(14, 5))
+plt.xticks(rotation=90)
+plt.legend(labels=['서울->경기'], loc='best') # 선그래프 범례 설명(참고사항)
+
+- xticks() 메소드에 size 옵션을 이용하면 폰트 크기 수정가능
+- plot() 함수에 marker='o' 옵션을 사용하면 원 모양의 점을 마커로 표시한다.
+- markersize 옵션은 marker 크기를 설정한다
+- plt.style.use('스타일명') 사용시 그래프 스타일 변경
+- print(plt.style.available) 하면 사용가능한 스타일 출력
+
+그래프에 대한 설명 덧붙이기
+- annotate() 함수 사용
+- 주석 내용을 넣을 위치와 정렬 방법등을 인자로 전달한다.
+- arrowprops 옵션을 사용하면 텍스트 대신 화살표가 표시된다.
+- 화살표 스타일, 시작점과 끝점의 좌표를 입력한다.
+- 주석을 넣을 여백 공간을 확보하기 위해 ylim() 함수 사용
+- xlim(), ylim() 함수 사용시 축의 값 범위를 늘린다.
+- 글자를 위아래 세로 방향으로 정렬하는 va 옵션은 'center', 'top', 'bottom', 'baseline'
+- 좌우 가로 방향으로 정렬하는 ha 옵션은 'center', 'left', 'right'
+- arrowprops에 lw 옵션은 선 굵기
+
+ex)
+plt.ylim(50000, 800000)
+
+# 주석 표시 - 화살표
+plt.annotate('1',
+             xy=(20, 620000),       #화살표의 머리 부분(끝점)
+             xytext=(2, 290000),    #화살표의 꼬리 부분(시작점)
+             xycoords='data',       #좌표체계
+             arrowprops=dict(arrowstyle='->', color='skyblue', lw=5), #화살표 서식
+             )
+
+# 주석 표시 - 텍스트
+plt.annotate('인구이동 증가(1970-1995)',  #텍스트 입력
+             xy=(10, 550000),            #텍스트 위치 기준점
+             rotation=25,                #텍스트 회전각도
+             va='baseline',              #텍스트 상하 정렬
+             ha='center',                #텍스트 좌우 정렬
+             fontsize=15,                #텍스트 크기
+             )
+
+화면 분할하여 그래프 여러 개 그리기 - axe 객체 활용
+- 여러개의 axe 객체를 만들고 분할된 화면마다 axe 객체를 하나씩 배정한다.
+- 여러개의 그래프를 비교하거나 다양한 정보를 동시에 보여줄 때 사용하면 좋다.
+- figure() 함수를 사용하여 그림틀을 만들고 figsize 옵션으로 그림틀 크기 설정
+- fig 객체에 add_subplot() 메소드를 적용하여 그림틀을 여러 개로 분할
+
+- add_subplot() 메소드의 인자에 '행의 크기', '열의 크기' '서브플롯 순서'를 순서대로 입력
+- axe 객체에는 y축 최소값, 최대값 정하기 위해서 set_ylim() 메소드 사용
+- axe 객체에 글자를 반시계 방향으로 회전시키기 위해 set_xticklabels() 메소드 사용
+- markerfacecolor 는 marker 머리 색깔, color는 선색깔
+- tick_params() 메소드로 축 눈금 라벨의 크기를 조절한다.
+ex)
+fig = plt.figure(figsize=(10, 10))
+ax1 = fig.add_subplot(2, 1, 1)
+ax2 = fig.add_subplot(2, 1, 2)
+ax1.plot(sr_one, 'o', markersize=10) # 'o'옵션을 전달하여 선을 그리지 않고 점으로만 표시
+ax2.plot(sr_one, marker='o', markerfacecolor='green', markersize=10, color='olive', linewidth=2)
+ax2.legend(labels=['서울->경기'], loc='best')
+
+ax1.set_ylim(50000, 800000)
+ax2.set_ylim(50000, 800000)
+# 축 눈금 라벨 지정 및 75도 회전
+ax1.set_xticklabels(sr_one.index, rotation=75)
+ax2.set_xticklabels(sr_one.index, rotation=75)
+plt.show()
+
+선 그래프의 꾸미기 옵션
+'o' 		선 그래프가 아니라 점 그래프로 표현
+marker='o' 	마커 모양
+markerfacecolor='green' 마커 배경색
+markersize=10	마커크기
+color='olive'	선의 색
+linewidth=2	선의 두께
+label='서울 -> 경기' 	라벨 지정
+
+ex)
+ax.tick_params(axis='x', labelsize=10)
+ax.tick_params(axis='y', labelsize=10)
+-> 축의 눈금 라벨 크기 조절
+
+- 동일한 그림에 여러개의 그리프를 추가하는 것도 가능하다.
+- 동일한 axe 객체에 선 그래프로 출력하는 plot() 메소드를 3번 적용한다.
+
+- int형범위 값을 문자열로 형변한 한뒤 list로 저장
+ex)
+col_years = list(map(str, range(1970, 2018)))
+
+Matplotlib에서 사용할 수 있는 색의 종류
+colors={}
+
+# 컬러 이름과 헥사코드 확인하여 딕셔서리에 입력
+for name, hex in matplotlib.colors.cnames.items():
+	colors[name] = hex
+
+# 딕셔너리 출력
+print(colors)
+
+DataFrame의 면적 그래프(matplot 아님)
+- 각 열의 데이터를 선 그래프로 구현하는데 선 그래프와 x축 사이의 공간에 색이 입혀진다
+- 색의 투명도는 기본값 0.5로 투과되어 보인다.
+- plot() 메소드에 kind='area' 옵션을 추가하면 된다.
+- 그래프를 누적여부, 기본값은 stacked=True 이고 쌓아 올리는 방식으로 표현된다.
+- False를 하면 동일한 화면에 여러개를 그린 것과 같은 결과가 된다.
+- plot()메소드로 생성한 그래프는 axe 객체이다. axe 객체는 세부적인 요소 설정 가능
+- alpha 옵션은 투명도
+ex)
+ax = df_4.plot(kind='area', stacked=True, alpha=0.2, figsize=(20, 10))
+print(type(ax))
+
+# axe 객체 설정 변경
+ax.set_title('서울 -> 타시도 인구 이동', size=30, color='brown', weight='bold')
+ax.set_ylabel('이동 인구 수', size=20, color='blue')
+ax.set_xlabel('기간', size=20, color='blue')
+ax.legend(loc='best', fontsize=15)
+
+막대 그래프
+- 세로형과 가로형 막대 그래프 두 종류가 있다.
+- 다만, 세로형의 경우 정보 제공 측면에서 선 그래프와 큰 차이가 없다.
+- 세로형 막대 그래프는 시간적으로 차이가 나는 두 점에서 데이터 값의 차이를 잘 설명한다.
+- kind='bar' 옵션 사용
+ex)
+df_4.plot(kind='bar', figsize=(20, 10), width=0.7, color=['orange', 'green', 'skyblue', 'blue'])
+plt.title('기간 이동 인구수', size=20)
+plt.ylabel('이동 인구수', size=20)
+plt.xlabel('기간', size=20)
+plt.ylim(5000, 30000)
+plt.legend(loc='best', fontsize=15)
+
+- 가로형 막대 그래프는 변수 사이 값의 크기 차이를 설명하는데 적합
+- kind='barh' 를 입력
+ex)
+df_total.plot(kind='barh', color='cornflowerblue', width=0.5, figsize=(10, 5))
+
+보조축 활용하기(2축 그래프 그리기)
+- ax 객체의 twinx() 메소드는 똑같은 쌍둥이 객체를 만든다. 그리고 plot을 적용하여 다른
+그래프를 그릴 수 있다.
+- Series객체의 shift(N) 함수를 이용하면 열의 값들을 N칸씩 미뤄서 저장 가능
+ex) 열이 1,2,3,4,5,6,7 의 sereis객체를 shift(1)하면 NaN,1,2,3,4,5 이 저장가능
+
+히스토그램
+- kind='hist'
+- bins 옵션은 구간의 갯수를 뜻한다. 10로 나누고 싶으면 plot 함수에 bins=10
+ex) 
+# 연비(mpg) 열에 대한 히스토그램 그리기
+df['mpg'].plot(kind='hist', bins=10, color='coral', figsize=(10, 5))
+
+산점도
+- 두 변수 사이의 관계를 나타낸다.
+- 선그래프를 그릴 때 plot 메소드에 'o' 옵션을 넣어 점으로만 표현하면 그것이 산점도
+- kind='scatter' 옵션 사용
+- x='열이름1' y='열이름2' 를 사용하여 두 변수사이의 관계
+- c 옵션은 색상, s는 크기 옵션
+ex)
+df.plot(kind='scatter', x='weight', y='mpg',  c='coral', s=10, figsize=(10, 5))
+
+★데이터프레임의 행(Series)의 내장객체 함수인 max(), min() 함수로 최대값, 최소값을
+구할 수 있다.
+- 그래프를 그림으로 저장하기 위해서는 plt.savefig("이름.확장자")
+- savefig함수에 transparent=True 옵션으로 그림 배경을 투명하게 지정하게 저장 가능
+- 색상을 정하는 컬러맵으로 'viridis' 옵션 사용
+ex)
+df.plot(kind='scatter', x='weight', y='mpg', marker='+', figsize=(10, 5),
+        cmap='viridis', c=cylinders_size, s=50, alpha=0.3)
+plt.title('Scatter Plot: mpg-weight-cylinders')
+
+plt.savefig("./scatter.png")
+plt.savefig("./scatter_transparent.png", transparent=True)
+
+파이 차트
+- 원을 파이 조각처럼 나누어서 표현, 조각의 크기는 해당 변수에 속하는 데이터 값 크기에 비례
+- kind='pipe' 옵션 사용
+- groupby() 메소드는 데이터프레임 df의 모든 데이터의 값을 기준으로 그룹화 한다.
+- groupby() 이후 sum 을 통하여 각 그룹별 합계를 집계할 수 있다.
+ex)
+df['count'] = 1
+df_origin = df.groupby('origin').sum()   # origin 열을 기준으로 그룹화, 합계 연산
+
+df_origin['count'].plot(kind='pie',
+                     figsize=(7, 5),
+                     autopct='%1.1f%%',   # 퍼센트 % 표시
+                     startangle=10,       # 파이 조각을 나누는 시작점(각도 표시)
+                     colors=['chocolate', 'bisque', 'cadetblue']    # 색상 리스트
+                     )
+
+박스 플롯
+- 범주형 데이터의 분포를 파악하는데 적합하다.
+- 박스 플롯은 5개의 통계지표(최소값, 1분위값, 중간값, 3분위값, 최대값) 제공
+- plt.rcParams['axes.unicode_minus']=False # 마이너스 부호 출력 설정
+- 수평박스 플롯을 나타내는 옵션 vert=False
+ex)
+fig = plt.figure(figsize=(15, 5))   
+ax1 = fig.add_subplot(1, 2, 1)
+ax2 = fig.add_subplot(1, 2, 2)
+
+ax2.boxplot(x=[df[df['origin']==1]['mpg'],
+               df[df['origin']==2]['mpg'],
+               df[df['origin']==3]['mpg']], 
+         labels=['USA', 'EU', 'JAPAN'],
+         vert=False)
+
+
+Seaborn 라이브러리 - 고급 그래프 도구
+titanic = sns.load_dataset('titanic') # 데이터셋 가져오기
+
+회귀선이 있는 산점도
+- regplot() 함수는 서로 다른 2개의 연속 변수 사이의 산점도를 그리고 선형회귀분석에 의한
+회귀선을 함께 나타낸다.
+- fit_reg=False 옵션을 설정하면 회귀선을 안보이게 할 수 있다.
+ex)
+# 그래프 그리기 - 선형회귀선 표시(fit_reg=True)
+sns.regplot(x='age',  # x축 변수
+            y='fare',  # y축 변수
+            data=titanic,  # 데이터
+            ax=ax1)  # axe 객체 - 1번째 그래프
+
+# 그래프 그리기 - 선형회귀선 미표시(fit_reg=False)
+sns.regplot(x='age',  # x축 변수
+            y='fare',  # y축 변수
+            data=titanic,  # 데이터
+            ax=ax2,  # axe 객체 - 2번째 그래프
+            fit_reg=False)  # 회귀선 미표시
+
+히스토그램/커널 밀도 그래프
+- 하나의 변수 데이터의 분포를 확인할 때 distplot() 함수 이용
+- hist=False 추가시 히스토그램이 표시되지 않음
+- kde=False 추가시 커널 밀도 그래프를 표시하지 않음
+
+히트맵
+- Seaborn 라이브러리는 히트맵(heatmap)을 그리는 heatmap() 메소드 제공
+- 2개의 범주형 변수를 x, y축에 놓고 매트릭스 형태로 분류
+- aggfunc='size' 옵션은 데이터 값의 크기를 기준으로 집계
+- cbar=False 옵션으로 컬러바를 표시하지 않을 수 있다.
+ex)
+# 피벗테이블로 범주형 변수를 각각 행, 열로 재구분하여 정리
+table = titanic.pivot_table(index=['sex'], columns=['class'], aggfunc='size')
+
+# 히트맵 그리기
+sns.heatmap(table,  # 데이터프레임
+            annot=True, fmt='d',  # 데이터 값 표시 여부, 정수형 포맷
+            cmap='YlGnBu',  # 컬러 맵
+            linewidth=.5,  # 구분 선
+            cbar=True)  # 컬러 바 표시 여부
+
+범주형 데이터의 산점도
+- 범주형 변수에 들어있는 각 범주별 데이터 분포 확인 방법
+- stripplot() 와 swarmplot() 함수 사용 가능
+- swarmplot() 함수는 데이터의 분산까지 고려하여 데이터 포인트가 서로 중복되지 않도록 그림
+
+막대 그래프
+- barplot() 함수 소개
+- hue 옵션으로 데이터들을 그룹화 해준다.(다른색깔로)
+ex)
+# x축, y축에 변수 할당
+sns.barplot(x='sex', y='survived', data=titanic, ax=ax1)
+
+# x축, y축에 변수 할당하고 hue 옵션 추가
+sns.barplot(x='sex', y='survived', hue='class', data=titanic, ax=ax2)
+
+# x축, y축에 변수 할당하고 hue 옵션을 추가하여 누적 출력
+sns.barplot(x='sex', y='survived', hue='class', dodge=True, data=titanic, ax=ax3)
+
+빈도 그래프
+- 각 범주에 속하는 데이터의 개수를 막대 그래프로 나타내는 countplot()
+- 그래프 색구성을 다르게 하려면 palette 옵션을 변경하여 적용
+
+박스 플롯/바이올린 그래프
+- 박스 플롯만으로는 데이터가 퍼져있는 분산의 정도를 정확하게 알기 어렵다.
+- 박스 플롯은 boxplot(), 바이올린 그래프는 violinplot()
+ex)
+# 박스 그래프 - 기본값
+sns.boxplot(x='alive', y='age', data=titanic, ax=ax1) 
+
+# 바이올린 그래프 - hue 변수 추가
+sns.boxplot(x='alive', y='age', hue='sex', data=titanic, ax=ax2) 
+
+# 박스 그래프 - 기본값
+sns.violinplot(x='alive', y='age', data=titanic, ax=ax3) 
+
+# 바이올린 그래프 - hue 변수 추가
+sns.violinplot(x='alive', y='age', hue='sex', data=titanic, ax=ax4) 
+
+조인트 그래프
+- jointplot() 함수는 산점도를 기본으로 표시하고 x-y축에 각 변수에 대한 히스토그램을
+동시에 보여준다.
+- 두 변수의 관계와 데이터가 분산되어 있는 정도를 한눈에 파악하기 좋다.
+- 회귀선 추가(kind='reg'), 육각 산점도(kind='hex'), 커널 밀집그래프(kind='kde')
+
+조건을 적용하여 화면을 그리드로 분할하기
+- FacetGrid() 함수는 행,열 방향으로 서로 다른 조건을 적용하여 여러개의 서브 플롯 만듦
+- 각 서브 플롯에 적용할 그래프 종류를 map() 메소드를 이용하여 그리드 객체에 전달
+ex)
+# 조건에 따라 그리드 나누기
+g = sns.FacetGrid(data=titanic, col='who', row='survived')
+
+# 그래프 적용하기
+g = g.map(plt.hist, 'age')
+
+이변수 데이터의 분포
+- pairplot() 함수는 인자로 전달되는 데이터프레임의 열을 두개씩 작을 지을 수 있는 모든
+조합에 대해 표현한다.
+- 그래프를 그리기 위해 만들어진 짝의 개수만큼 화면을 그리드로 나눈다.
+ex)
+# titanic 데이터셋 중에서 분석 데이터 선택하기
+titanic_pair = titanic[['age', 'pclass', 'fare']] # 데이터 프레임
+
+# 조건에 따라 그리드 나누기
+g = sns.pairplot(titanic_pair)
+
+Folium 라이브러리 
+지도 만들기
+- Folium 라이브러리의 Map() 함수를 이용하면 간단하게 지도 객체를 만들 수 있다.
+- 지도화면은 고정된 것이 아니고 줌기능과 화면이동 가능
+-★folium.Map() 함수에 location 옵션에 [위도, 경도] 입력시 그 지점을 중심으로 지도
+ex)
+# 서울 지도 만들기
+seoul_map = folium.Map(location=[37.55,126.98], zoom_start=12)
+
+# 지도를 HTML 파일로 저장하기
+seoul_map.save('./seoul.html')
+
+지도 스타일 적용하기
+- Map() 함수에 tiles 옵션을 적용하면 지도에 적용하는 스타일을 변경하여 지정 가능
+- tiles='Stamen Terrain', 'Stamen Toner'
+ex)
+# 서울 지도 만들기
+seoul_map2 = folium.Map(location=[37.55,126.98], tiles='Stamen Terrain',
+                        zoom_start=12) # 산악지형 선명히
+seoul_map3 = folium.Map(location=[37.55,126.98], tiles='Stamen Toner',
+                        zoom_start=15) # 흑백스타일로 도로망 강조
+
+지도에 마커 표시하기
+- 마커 위치를 표시하려면 Marker() 함수에 위도, 경도 정보를 전달
+- popup 옵션을 추가하면 마커를 클릭했을 때 팝업창에 표시해주는 텍스트를 넣을 수 있다.
+ex)
+# 서울 지도 만들기
+seoul_map = folium.Map(location=[37.55,126.98], tiles='Stamen Terrain',
+                        zoom_start=12)
+
+# 대학교 위치정보를 Marker로 표시
+for name, lat, lng in zip(df.index, df.위도, df.경도):
+    folium.Marker([lat, lng], popup=name).add_to(seoul_map)
+
+원형마커 설정
+- Marker() 함수 대신에 CircleMarker() 함수를 사용
+- 원형마커의 크기, 색상, 투명도 설정 가능
+ex)
+# 대학교 위치정보를 CircleMarker로 표시
+for name, lat, lng in zip(df.index, df.위도, df.경도):
+    folium.CircleMarker([lat, lng],
+                        radius=10,         # 원의 반지름
+                        color='brown',         # 원의 둘레 색상
+                        fill=True,
+                        fill_color='coral',    # 원을 채우는 색
+                        fill_opacity=0.7, # 투명도
+                        popup=name
+    ).add_to(seoul_map)
+
+지도 영역에 단계구분도 표시하기
+- Chropleth() 함수 이용
+- 지도상의 어떤 경계에 둘러싸인 영역에 색을 칠하거나 음영을 나타내는 방
+ex)
+try:
+    geo_data = json.load(open(geo_path, encoding='utf-8'))
+except:
+    geo_data = json.load(open(geo_path, encoding='utf-8-sig'))
+
+# 경기도 지도 만들기
+g_map = folium.Map(location=[37.5502,126.982],
+                   tiles='Stamen Terrain', zoom_start=9)
+
+# 출력할 연도 선택 (2007 ~ 2017년 중에서 선택)
+year = '2017'
+
+# Choropleth 클래스로 단계구분도 표시하기
+folium.Choropleth(geo_data=geo_data,    # 지도 경계
+                 data = df[year],      # 표시하려는 데이터
+                 columns = [df.index, df[year]],  # 열 지정
+                 fill_color='YlOrRd', fill_opacity=0.7, line_opacity=0.3,
+                 threshold_scale=[10000, 100000, 300000, 500000, 700000],
+                 key_on='feature.properties.name',
+                 ).add_to(g_map)
+
+데이터 사전 처리
+누락 데이터 처리
+- 머신러닝 데이터 분석의 정확도는 분석 데이터 품질에 의해 좌우된다.
+- 누락데이터, 중복데이터, 오류 수정, 분석 목적에 맞게 변형하는 과정이 필요.
+- 누락데이터는 NaN으로 표시
+
+- value_counts() 메소드를 이용하면 특정열의 누락데이터 갯수 확인가능
+- 누락데이터 개수를 확인하려면 dropna=False 옵션 사용
+
+누락 데이터를 찾는 직접적인 방법
+- isnull() : 누락데이터면 True 반환, 아니면 False
+- notnull() : 유효한 데이터가 존재하면 True, 누락 데이터면 False
+ex)
+nan_deck = df['deck'].value_counts(dropna=False)
+
+# isnull() 메서드로 누락 데이터 찾기
+print(df.head().isnull())
+
+# notnull() 메서드로 누락 데이터 찾기
+print(df.head().notnull())
+
+# isnull() 메서드로 누락 데이터 개수 구하기 (열) 왜열인지 모르겠으나 열...
+print(df.head().isnull().sum(axis=0))
+
+누락 데이터 제거
+열을 삭제하면 특성(변수)를 제거, 행을 삭제하면 관측값(레코드)을 제거
+- 데이터프레임의 dropna() 메소드 이용
+- thresh 옵션을 사용하여 NaN개수가 특정개수 이상이면 모든 열 삭제 가능
+ex)
+# NaN 값이 500개 이상인 열을 모두 삭제 - deck 열(891개 중 688개의 NaN 값)
+df_thresh = df.dropna(axis=1, thresh=500)
+print(df_thresh.columns)
+
+- subset 옵션을 'age'열로 한정하면 'age'열의 행중에서 NaN값이 있는 모든행(axis=0) 삭제
+- 기본값으로 how='any' 옵션 적용, NaN값이 하나라도 존재하면 삭제한다
+- how='all' 옵션 입력하면 모든 데이터가 NaN값이 하나라도 존재하면 삭제
+ex)
+# age 열에 나이 데이터가 없는 모든 행을 삭제 - age 열(891개 중 177개의 NaN 값)
+df_age = df.dropna(subset=['age'], how='any', axis=0)
+
+누락 데이터 치환
+- 누락데이터를 무작정 삭제하면 어렵게 수집한 데이터 활용하지 못하게 된다.
+- 누락 데이터를 바꿔서 대체할 값으로는 데이터의 평균값, 최빈값등을 활용
+- fillna() 메소드 이용, 새로운 객체를 반환하므로 inplace=True 옵션 추가 필요
+- 기존의 mean() 메소드는 NaN을 제외하고 평균값 계산
+- fillna(mean)을 전달하면 NaN을 mean값으로 치환하여 계산
+-★Series는 axis=0 밖에 존재하지 않는다.
+ex)
+# age 열의 NaN값을 다른 나이 데이터의 평균으로 변경하기
+mean_age = df['age'].mean(axis=0)   # age 열의 평균 계산 (NaN 값 제외)
+df['age'].fillna(mean_age, inplace=True)
+
+- NaN값을 문자열 값으로 대체할 경우에는 최빈값으로
+-★value_counts(dropna=True).idxmax() # 유효값 최대갯수 찾기
+ex)
+# embark_town 열의 NaN값을 승선도시 중에서 가장 많이 출현한 값으로 치환하기
+most_freq = df['embark_town'].value_counts(dropna=True).idxmax()
+print(most_freq)
+print('\n')
+
+df['embark_town'].fillna(most_freq, inplace=True)
+
+누락 데이터가 NaN으로 표시되지 않은 경우
+df.replace('?', np.nan, inplace=True) # 누락데이터 ?를 NaN으로 대체한다.
+
+- 데이터셋의 특성상 서로 이웃하고 있는 데이터끼리 유사성을 가질 가능성이 높다.
+- 이럴때 앞이나 뒤에 이웃하고 있는 값으로 치환
+- method='ffill' 옵션을 추가하면 NaN이 있는 해의 직전 행 값으로 바꿔준다.
+- method='bfill' NaN이 있는 행의 바로 다음 행이 있는 값으로 치환
+
+중복 데이터 처리
+- 동일한 대상이 중복으로 존재하는 것이 분석결과를 왜곡하는 것이라면 처리해주어야 한다.
+
+중복데이터 확인
+- duplicated() 메소드 사용
+- 전에 나온 행들과 비교하여 중복되는 행이면 True 반환, 처음 나오는 행이면 False 반환
+- 중복 여부를 나타내는 Boolean 시리즈를 반환한다.
+ex)
+# 데이터프레임 전체 행 데이터 중에서 중복값 찾기
+df_dup = df.duplicated()
+
+# 데이터프레임의 특정 열 데이터에서 중복값 찾기
+col_dup = df['c2'].duplicated()
+
+중복 데이터 제거
+- drop_duplicates()
+- 중복되는 행을 제거하고 고유한 관측값을 가진 행들만 남긴다. 원본객체 변경시 inplace=True
+- subset 옵션에 '열이름의 리스트' 전달 가능
+ex)
+# c2, c3열을 기준으로 중복 행을 제거
+df3 = df.drop_duplicates(subset=['c2', 'c3'])
+
+데이터 표준화
+단위 환산
+- round(n) 소수점 n번째 자리까지 반올림
+ex)
+# mpg(mile per gallon)를 kpl(kilometer per liter)로 변환 (mpg_to_kpl = 0.425)
+mpg_to_kpl = 1.60934 / 3.78541
+
+# mpg 열에 0.425를 곱한 결과를 새로운 열(kpl)에 추가
+df['kpl'] = df['mpg'] * mpg_to_kpl
+
+자료형 변환
+- 숫자가 문자열로 저장된 경우에 숫자형으로 변환해야 한다.
+- dtypes 속성을 사용하여 자료형을 확인한다. info() 메소드로도 가능
+- astype('float') 함수를 이용하여 문자열을 실수형으로 변환한다.
+ex)
+# 각 열의 자료형 확인
+print(df.dtypes)
+
+df['horsepower'].replace('?', np.nan, inplace=True)      # '?'을 np.nan으로 변경
+df.dropna(subset=['horsepower'], axis=0, inplace=True)   # 누락데이터 행을 삭제
+df['horsepower'] = df['horsepower'].astype('float')      # 문자열을 실수형으로 변환
+
+- 유한개의 고유값이 반복적으로 나타나는 경우에는 category 자료형으로 변환하는것이 좋음
+- astype('category') 메소드를 이용하여 변환
+- sample(n) 열에서 무작위로 n개의 행을 출력가능하다.
+- unique() 메소드로 고유값 확인 가능
+ex)
+# model year 열의 정수형을 범주형으로 변환
+print(df['model year'].sample(3))
+df['model year'] = df['model year'].astype('category')
+print(df['model year'].sample(3))
+
+범주형 데이터 처리(category)
+구간 분할(binning)
+- 이산적인 값으로 나타내어 구간별 차이를 드러러내는 것
+- cut() 메소드를 활용하여 구간을 나눌 수 있다.
+- 구간갯수는 처음과 끝을 포함한다. 즉 3구간으로 나누려면 4개의 경계값이 필요
+
+★★경계값을 구하는 방법중에서 NumPy 라이브러리의 histogram() 함수를 활용하여
+나누려는 구간(bin)개수를 bins 옵션에 입력하면 각 구간에 속하는 값의 개수와 경계값
+리스트를 반환한다.
+ex)
+# np.histogram 함수로 3개의 bin으로 나누는 경계 값의 리스트 구하기
+count, bin_dividers = np.histogram(df['horsepower'], bins=3)
+print(bin_dividers)
+
+- cut() 함수의 옵션을 설정한다.
+- 앞에서 구한 경계값의 리스트를 bins 옵션에 할당하고 각 구간의 이름을 labels 옵션에 할당
+- include_lowest=True 옵션을 사용하면 각 구간의 낮은 경계값을 포함한다.
+ex)
+# 3개의 bin에 이름 지정
+bin_names = ['저출력', '보통출력', '고출력']
+
+# pd.cut 함수로 각 데이터를 3개의 bin에 할당
+df['hp_bin'] = pd.cut(x=df['horsepower'],     # 데이터 배열
+                      bins=bin_dividers,      # 경계 값 리스트
+                      labels=bin_names,       # bin 이름
+                      include_lowest=True)    # 첫 경계값 포함
+
+더미 변수
+- 범주형 데이터를 회귀분석 등 머신러닝 알고리즘에 바로 사용할 수 없는 경우가 있음.
+- 컴퓨터가 인식가능한 입력값으로 변환할 필요가 있음. 0 또는 1로 (더미변수라고 지칭)
+- 여기서 0과 1은 어떤 특성이 있는지 없는지 여부를 나타냄
+- 이처럼 범주형 데이터를 컴퓨터가 인식할 수 있도록 숫자 0과 1로만 구성하는 원핫벡터로
+변환한다고해서 원핫인코딩 이라 한다.
+- get_dummies() 함수 사용시 범주형 변수의 모든 고유값을 각각 새로운 더미 변수로 변환
+ex)
+# pd.cut 으로 각 데이터를 3개의 bin에 할당
+df['hp_bin'] = pd.cut(x=df['horsepower'],     # 데이터 배열
+                      bins=bin_dividers,      # 경계 값 리스트
+                      labels=bin_names,       # bin 이름
+                      include_lowest=True)    # 첫 경계값 포함
+
+# hp_bin 열의 범주형 데이터를 더미 변수로 변환
+horsepower_dummies = pd.get_dummies(df['hp_bin']) # 데이터 프레임 형태로 반환
+-> 각 고유 값은 열의 이름이 되고 속해 있던 행에 1로 표시, 데이터 프레임으로 반환
+
+- sklearn 라이브러리를 이용해서 원핫인코딩 편하게 처리 가능
+- 결과는 희소행렬(sparse matrix)로 정리
+- 희소 행렬은 (행, 열) 좌표와 값 형태로 정리된다.
+ex)
+# 전처리를 위한 encoder 객체 만들기
+label_encoder = preprocessing.LabelEncoder()       # label encoder 생성
+onehot_encoder = preprocessing.OneHotEncoder()   # one hot encoder 생성
+
+# label encoder로 문자열 범주를 숫자형 범주로 변환
+onehot_labeled = label_encoder.fit_transform(df['hp_bin'].head(15))
+
+# 2차원 행렬로 형태 변경
+onehot_reshaped = onehot_labeled.reshape(len(onehot_labeled), 1)
+
+# 희소행렬로 변환
+onehot_fitted = onehot_encoder.fit_transform(onehot_reshaped)
+★label fit_transform -> onehot_labeled reshape -> onehot_encoder fit_transform
+
+정규화
+- 각 숫자 데이터의 상대적 크기 차이때문에 머신러닝 분석 결과가 달라질 수 있다.
+- 따라서 상대적 크기 차이를 제거할 필요 = 정규화
+- 동일한 크기 기준으로 나눈 비율로 나타내는 것
+- 정규화 과정을 거친 데이터의 범위는 0~1 또는 -1~1이 된다.
+- 1. 최대값으로 나누는 정규화 방법
+- 2. (해당 열값-최소값) / (최대값 - 최소값) 
+1, 2 모두 정규화 최대값은 1이 된다.
+
+시계열 데이터
+- 시계열 데이터를 데이터프레임의 행 인덱스로 사용하면 시간으로 기록된 데이터 분석 편리
+- 1. 특정한 시점을 기록하는 Timestamp 2. 두 시점 사이의 일정한 기간 Period
+
+다른 자료형을 시계열 객체로 변환
+문자열을 TimeStamp로 변환
+- to_datetime() 함수를 사용하면 다른 자료형을 Timestamp를 나타내는 datetime64
+- 시계열 값을 행 인덱스로 지정하면 판다스는 DatetimeIndex 로 저장한다.
+자료형으로 변환 가능
+ex)
+# 문자열 데이터(시리즈 객체)를 판다스 Timestamp로 변환
+df['new_Date'] = pd.to_datetime(df['Date'])   #df에 새로운 열로 추가
+
+Timestamp 를 Period로 변환
+- to_period() 함수를 이용하면 일정한 기간을 나타내는 Period 객체로 Timestamp 객체로 변환
+- freq 옵션에 기준이 되는 기간을 설정한다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
