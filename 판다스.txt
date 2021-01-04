@@ -536,6 +536,7 @@ df.set_index('이름', inplace=True)
 - reindex() 메소드를 사용하면 데이터프레임의 행 인덱스를 새로운 배열로 재지정 할 수 있다
 - 기존 객체를 변경하지 않고 새로운 데이터프레임 객체를 반환한다
 - DataFrame 객체.reindex(새로운 인덱스 배열)
+- reindex (columns= [ '컬럼','컬럼',~~  ], index = [ '인덱스','인덱스', ~~~ ] )
 ex)
 new_index = ['r0', 'r1', 'r2', 'r3', 'r4']
 ndf2 = df.reindex(new_index, fill_value=0)
@@ -1559,7 +1560,171 @@ def totoal_number_missing(x):
 
 열 재구성
 열 순서 변경
+- 데이터프레임의 열 순서 변경 : DataFrame 객체[재구성한 열 이름의 리스트]
+ex)
+# 열 이름을 사용자가 정의한 임의의 순서로 재배치하기
+columns_customed = ['pclass', 'sex', 'age', 'survived']
+df_customed = df[columns_customed]
 
+열 분리
+- 성, 이름이나 년, 월, 일을 분리하여 사용하는 경우가 생긴다.
+- split(delimieter) 로 구분짓는다.
+- '연-월-일' 형식의 문자열 데이터를 분리하여 ['연', '월', '일'] 형태의 리스트로 정리
+- 반환되는 객체는 시리즈이다.
+-★시리즈의 문자열 리스트 인덱싱: Series 객체.str.get(인덱스)
+ex)
+# 연, 월, 일 데이터 분리하기
+df['연월일'] = df['연월일'].astype('str')   # 문자열 메소드 사용을 자료형 변경
+dates = df['연월일'].str.split('-')        # 문자열을 split() 메서드로 분리
+print(dates.head(), '\n')
+
+# 분리된 정보를 각각 새로운 열에 담아서 df에 추가하기
+df['연'] = dates.str.get(0)     # dates 변수의 원소 리스트의 0번째 인덱스 값
+df['월'] = dates.str.get(1)     # dates 변수의 원소 리스트의 1번째 인덱스 값
+df['일'] = dates.str.get(2)     # dates 변수의 원소 리스트의 2번째 인덱스 값
+
+필터링
+- 가장 대표적인 방법 : 불린 인덱싱
+- 데이터프레임의 불린 인덱싱 : DataFrame 객체[불린시리즈]
+ex)
+# 나이가 10대(10~19세)인 승객만 따로 선택
+mask1 = (titanic.age >= 10) & (titanic.age < 20)
+df_teenage = titanic.loc[mask1, :]
+
+# 나이가 10세 미만(0~9세) 또는 60세 이상인 승객의 age, sex, alone 열만 선택
+mask3 = (titanic.age < 10) | (titanic.age >= 60)
+df_under10_morethan60 = titanic.loc[mask3, ['age', 'sex', 'alone']]
+-> 이것도 가능
+
+isin() 메소드 활용
+- 데이터프레임의 열에 isin() 메소드를 적용하면 특정 값을 가진 행들을 따로 추출
+- isin() 메소드를 활용한 필터링 : DataFrame의 열 객체.isin(추출 값의 리스트)
+ex)
+# isin() 메서드 활용하여 동일한 조건으로 추출
+isin_filter = titanic['sibsp'].isin([3, 4, 5])
+df_isin = titanic[isin_filter]
+
+데이터프레임 합치기
+- concat(), merge(), join() 메소드 등이 있다.
+
+데이터 프레임 연결
+- 서로 다른 데이터프레임들의 구성 형태와 속성이 균일하다면 행 또는 열 어느방향으로
+붙여도 데이터 일관성이 유지된다.
+- 데이터프레임 연결: pandas.concat(데이터프레임의 리스트)
+- 축을 지정하지 않으면 기본옵션은 axis=0, 위 아래 행방향으로 연결
+- 열 이름에 대해서는 join='outer' 옵션이 기본 적용
+즉, A,B,C 와 B,C,D,E 합집합으로 A,B,C,D,E 구성된다.
+- join='inner'의 경우 공통을 속하는 B,C가 기준이 된다.
+ex)
+# 2개의 데이터프레임을 위 아래 행 방향으로 이어 붙이듯 연결하기
+result1 = pd.concat([df1, df2], join='outer')
+
+- ignore_index=True 옵션은 기존 행 인덱스를 무시하고 새로운 행 인덱스를 설정한다.
+ex)
+# ignore_index=True 옵션 설정하기
+result2 = pd.concat([df1, df2], ignore_index=True)
+print(result2, '\n')
+
+- axis=1 옵션을 사용하면 데이터프레임을 좌우 열 방향으로 연결
+ex)
+# 2개의 데이터프레임을 좌우 열 방향으로 이어 붙이듯 연결하기
+result3 = pd.concat([df1, df2], axis=1)
+
+- 데이터프레임과 시리즈를 좌우 열 방향으로 연결할 수 있다.
+- 데이터프레임에 열을 추가하는 것과 같다. 이때 시리즈의 이름이 열이름으로 변환
+- 데이터 프레임의 행 인덱스와 시리즈의 인덱스가 같아야 한다. 없을 경우 NaN으로 처리
+ex)
+# 시리즈 만들기
+sr1 = pd.Series(['e0', 'e1', 'e2', 'e3'], name='e')
+sr2 = pd.Series(['f0', 'f1', 'f2'], name='f', index=[3, 4, 5])
+sr3 = pd.Series(['g0', 'g1', 'g2', 'g3'], name='g')
+
+result4 = pd.concat([df1, sr1], axis=1)
+
+# sr1과 sr3을 좌우 열 방향으로 연결하기
+result6 = pd.concat([sr1, sr3], axis=1)
+result7 = pd.concat([sr1, sr3], axis=0)
+
+데이터프레임 병합
+- concat() 함수가 여러 데이터프레임을 이어 붙이는 연결 하는 것
+- merge()는 SQL의 join 명령과 비슷한 방식으로 어떤 기준에 의해 두 데이터프레임을 병합
+- 이때 기준이 되는 열이나 인덱스를 키 라고 부른다. 키는 양쪽 데이터프레임 모두 존재해야함.
+- 데이터프레임 병합: pandas.merge(df_left, df_right, how='inner', on=None)
+
+- on=None 옵션은 두 데이터프레임에 공통으로 속하는 모든 열을 기준으로 병합한다는 뜻
+- how='inner' 옵션은 기준이 되는 열의 데이터가 양쪽 데이터프레임에 공통으로 존재일때 추출
+ex)
+# 데이터프레임 합치기 - 교집합
+merge_inner = pd.merge(df1, df2)
+
+# 데이터프레임 합치기 - 합집합
+merge_outer = pd.merge(df1, df2, how='outer', on='id')
+
+- how 옵션으로 'left', 'right' 가능
+ex)
+# 데이터프레임 합치기 - 왼쪽 데이터프레임 기준, 키 값 분리
+merge_left = pd.merge(df1, df2, how='left', left_on='stock_name', right_on='name')
+
+데이터프레임 결합
+- join() 메소드는 merge() 함수 기반으로 만들어져서 작동방식 비슷
+- 다만 join() 메소드는 두 데이터프레임의 행 인덱스를 기준으로 결합한다
+- on=keys 옵션을 설정하면 행 인덱스 대신 다른 열을 기준으로 결합하는 것이 가능하다
+- 행 인덱스 기준을 결합 : DataFrame1.join(DataFrame2, how='left')
+ex)
+# 데이터프레임 결합(join)
+df3 = df1.join(df2)
+
+# 데이터프레임 결합(join) - 교집합
+df4 = df1.join(df2, how='inner')
+
+그룹 연산
+- 복잡한 데이터를 어떤 기준에 따라 여러 그룹으로 나눠서 관찰하는것도 좋은 방법
+- 이처럼 특정 기준을 적용하여 몇개의 그룹으로 분할하여 처리하는 것을 그룹 연산이라고 함
+- 그룹 연산은 데이터를 집계, 변환, 필터링 하는데 효율적
+
+그룹 객체 만들기(분할단계)
+1개 열을 기준으로 그룹화
+- 그룹 연산 : DataFrame 객체.groupby(기준이 되는 열 or 리스트)
+ex)
+# class 열을 기준으로 분할
+grouped = df.groupby(['class'])
+print(grouped)
+print('\n')
+
+# 그룹 객체를 iteration으로 출력: head() 메소드로 첫 5행만을 출력
+for key, group in grouped:
+    print('* key :', key)
+    print('* number :', len(group))
+    print(group.head())
+    print('\n')
+
+- 그룹 객체에 get_group() 메소드를 적용하면 특정 그룹만을 선택 할 수 있다.
+ex)
+# 개별 그룹 선택하기
+group3 = grouped.get_group('Third')
+print(group3.head())
+
+여러 열을 기준으로 그룹화
+- DataFrame 객체.groupby(기준이 되는 열의 리스트)
+ex)
+# class 열, sex 열을 기준으로 분할
+grouped_two = df.groupby(['class', 'sex'])
+
+# grouped_two 그룹 객체를 iteration으로 출력
+for key, group in grouped_two:
+    print('* key :', key)
+    print('* number :', len(group))
+    print(group.head())
+    print('\n')
+
+# grouped_two 그룹 객체에서 개별 그룹 선택하기
+group3f = grouped_two.get_group(('Third', 'male'))
+
+그룹 연산 메소드(적용-결합 단계)
+데이터 집계
+- 그룹 객체에 다양한 연산을 적용할 수 있다.
+- 기본함수 mean(), max(), describe(), info(), first(), last(), sum(), count(), size(), var(), std() 등..
+- 표준편차 데이터 집계(내장함수) : group 객체.std()
 
 
 
