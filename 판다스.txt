@@ -1710,7 +1710,7 @@ ex)
 # class 열, sex 열을 기준으로 분할
 grouped_two = df.groupby(['class', 'sex'])
 
-# grouped_two 그룹 객체를 iteration으로 출력
+★★# grouped_two 그룹 객체를 iteration으로 출력
 for key, group in grouped_two:
     print('* key :', key)
     print('* number :', len(group))
@@ -1725,6 +1725,48 @@ group3f = grouped_two.get_group(('Third', 'male'))
 - 그룹 객체에 다양한 연산을 적용할 수 있다.
 - 기본함수 mean(), max(), describe(), info(), first(), last(), sum(), count(), size(), var(), std() 등..
 - 표준편차 데이터 집계(내장함수) : group 객체.std()
+
+- 집계 연산을 처리하는 사용자 정의 함수를 그룹객체에 적용하려면 agg() 메소드 사용
+- agg() 메소드 데이터 집계 : group 객체.agg(매핑 함수)
+ex)
+# 그룹 객체에 agg() 메소드 적용 - 사용자 정의 함수를 인수로 전달
+def min_max(x):  # 최대값 - 최소값
+    return x.max() - x.min()
+
+
+# 각 그룹의 최대값과 최소값의 차이를 계산하여 그룹별로 집계
+agg_minmax = grouped.agg(min_max)
+
+- 동시에 여러개의 함수를 사용하여 각 그룹별 데이터에 대한 집계연산 처리 가능
+- 리스트 형태로 함수를 전달하고 열마다 다른 종류의 함수를 적용하려면 
+{열 : 함수} 형태의 딕셔너리 전달
+- 모든 열에 여러 함수를 매핑 : group 객체.agg([함수1, 함수2, 함수3, ...])
+- 각 열마다 다른 함수 매핑 : group 객체.egg({'열1' : 함수1, '열2' : 함수2, ...})
+ex)
+# 여러 함수를 각 열에 동일하게 적용하여 집계
+agg_all = grouped.agg(['min', 'max'])
+
+# 각 열마다 다른 함수를 적용하여 집계
+agg_sep = grouped.agg({'fare': ['min', 'max'], 'age': min_max}) # 사용자 정의함수 적용
+
+그룹 연산 데이터 변환
+- transform() 메소드는 그룹별로 구분하여 각 원소에 함수를 적용하지만 그룹별 집계 대신
+각 원소의 행 인덱스와 열 이름을 기준으로 연산결과 반환
+- 데이터 변환연산 : group 객체.transform(매핑 함수)
+- 흠....이해가 잘안간다. 293p 그냥 쓰지말자
+
+그룹객체 필터링
+- 그룹 객체 필터링 : group 객체.filter(조건식 함수)
+ex)
+# 데이터 개수가 200개 이상인 그룹만을 필터링하여 데이터프레임으로 반환
+grouped_filter = grouped.filter(lambda x: len(x) >= 200)
+
+# age 열의 평균이 30보다 작은 그룹만을 필터링하여 데이터프레임으로 반환
+age_filter = grouped.filter(lambda x: x.age.mean() < 30)
+
+그룹 객체에 함수 매핑
+- apply() 메소드는 판다스 객체의 개별 원소를 특정 함수에 일대일 매핑
+- 범용 메소드 : group 객체.apply(매핑 함수)
 
 
 
