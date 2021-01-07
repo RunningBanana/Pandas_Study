@@ -456,6 +456,7 @@ DataFrame 객체.index = 새로운 행 인덱스 배열
 DataFrame 객체.columns = 새로운 열 이름 배열
 이와 같이 기존의 DataFrame의 index와 columns 변경 가능하다.
 
+★
 데이터 프레임에 rename 메소드를 적용하여 행 인덱스 또는 열 이름의 일부를 선택하여 변경가능
 DataFrame 객체.rename(index={기존 인덱스:새로운 인덱스, ...})
 DataFrame 객체.rename(columns={기존 이름:새이름, ...})
@@ -792,6 +793,7 @@ box 박스 플롯		hexbin 고밀도 산점도 그래프
 산점도
 - kind='scatter'
 - 비교할 두 변수를 선택하여 x축과 y축으로 지정한다.
+- c는 색깔 옵션, s는 마커 크기 옵션, figsize는 전체 크기
 ex)
 df.columns = ['mpg','cylinders','displacement','horsepower','weight',
               'acceleration','model year','origin','name']
@@ -1135,6 +1137,7 @@ g = g.map(plt.hist, 'age')
 - pairplot() 함수는 인자로 전달되는 데이터프레임의 열을 두개씩 작을 지을 수 있는 모든
 조합에 대해 표현한다.
 - 그래프를 그리기 위해 만들어진 짝의 개수만큼 화면을 그리드로 나눈다.
+-★자기 자신과의 관계는 히스토그램으로 표시
 ex)
 # titanic 데이터셋 중에서 분석 데이터 선택하기
 titanic_pair = titanic[['age', 'pclass', 'fare']] # 데이터 프레임
@@ -1249,7 +1252,7 @@ ex)
 df_thresh = df.dropna(axis=1, thresh=500)
 print(df_thresh.columns)
 
-- subset 옵션을 'age'열로 한정하면 'age'열의 행중에서 NaN값이 있는 모든행(axis=0) 삭제
+- ★subset 옵션을 'age'열로 한정하면 'age'열의 행중에서 NaN값이 있는 모든행(axis=0) 삭제
 - 기본값으로 how='any' 옵션 적용, NaN값이 하나라도 존재하면 삭제한다
 - how='all' 옵션 입력하면 모든 데이터가 NaN값이 하나라도 존재하면 삭제
 ex)
@@ -1374,6 +1377,7 @@ df['hp_bin'] = pd.cut(x=df['horsepower'],     # 데이터 배열
 - 이처럼 범주형 데이터를 컴퓨터가 인식할 수 있도록 숫자 0과 1로만 구성하는 원핫벡터로
 변환한다고해서 원핫인코딩 이라 한다.
 - get_dummies() 함수 사용시 범주형 변수의 모든 고유값을 각각 새로운 더미 변수로 변환
+- prefix 옵션을 사용하여 새로 추가될 더미변수 열 이름에 접두어를 붙일 수 있다.
 ex)
 # pd.cut 으로 각 데이터를 3개의 bin에 할당
 df['hp_bin'] = pd.cut(x=df['horsepower'],     # 데이터 배열
@@ -1767,6 +1771,164 @@ age_filter = grouped.filter(lambda x: x.age.mean() < 30)
 그룹 객체에 함수 매핑
 - apply() 메소드는 판다스 객체의 개별 원소를 특정 함수에 일대일 매핑
 - 범용 메소드 : group 객체.apply(매핑 함수)
+ex)
+# 집계 : 각 그룹별 요약 통계정보를 집계
+agg_grouped = grouped.apply(lambda x: x.describe())
+
+# 필터링 : age 열의 데이터 평균이 30보다 작은 그룹만을 필터링하여 출력
+age_filter = grouped.apply(lambda x: x.age.mean() < 30)
+print(type(age_filter))
+print(age_filter)
+print('\n')
+for x in age_filter.index:
+    if age_filter[x]==True:
+        age_filter_df = grouped.get_group(x)
+        print(age_filter_df.head())
+        print('\n')
+
+멀티 인덱스
+- 판다스는 행 인덱스를 여러 레벨로 구현할 수 있도록 멀티 인덱스 클래스를 지원.
+- loc를 이용하여 하나의 인덱스만 사용 가능
+- loc와 인자로 투플형태를 전달하여 2개의 인덱서 사용 가능
+ex)
+# class 열, sex 열을 기준으로 분할
+grouped = df.groupby(['class', 'sex'])
+
+# class 값이 First인 행을 선택하여 출력
+print(gdf.loc['First'])
+
+# class 값이 First이고, sex 값이 female인 행을 선택하여 출력
+print(gdf.loc[('First', 'female')])
+
+# sex 값이 male인 행을 선택하여 출력
+print(gdf.xs('male', level='sex')) #★두번째 인덱서만 사용하기 위해서는 xs 사용
+
+피벗
+- pivot_table() 함수는 엑셀에서 사용하는 피벗테이블과 비슷한 기능을 처리
+- 피벗테이블을 구성하는 4가지 요소(행 인덱스, 열 인덱스, 데이터 값, 데이터 집계함수) 적용
+할 데이터프레임의 열을 각각 지정하여 인자로 전달
+ex)
+# 행, 열, 값, 집계에 사용할 열을 1개씩 지정 - 평균 집계
+pdf1 = pd.pivot_table(df,              # 피벗할 데이터프레임
+                     index='class',    # 행 위치에 들어갈 열
+                     columns='sex',    # 열 위치에 들어갈 열
+                     values='age',     # 데이터로 사용할 열
+                     aggfunc='mean')   # 데이터 집계 함수
+
+# 값에 적용하는 집계 함수를 2개 이상 지정 가능 - 생존율, 생존자 수 집계
+pdf2 = pd.pivot_table(df,                       # 피벗할 데이터프레임
+                     index='class',             # 행 위치에 들어갈 열
+                     columns='sex',             # 열 위치에 들어갈 열
+                     values='survived',         # 데이터로 사용할 열
+                     aggfunc=['mean', 'sum'])   # 데이터 집계 함수
+
+머신 러닝
+지도 학습 vs 비지도 학습
+- 정답 데이터를 다른 데이터와 함께 컴퓨터 알고리즘에 입력하는 방식을 지도학습
+ex) 회귀분석, 분류 모형
+- 정답 데이터 없이 컴퓨터 알고리즘 스스로 데이터로부터 숨은 패턴을 찾아내는 방식을 
+비지도학습
+ex) 군집화
+
+머신러닝 프로세스
+- 데이터 정리 -> 데이터 분리 -> 알고리즘 준비 -> 모형 학습(훈련데이터) -> 
+예측(검증 데이터) -> 모형 평가 -> 모형 활용
+
+회귀 분석
+- 연속적인 값을 갖는 연속 변수를 예측하는데 주로 활용
+- 분석 모형이 예측하고자 하는 목표를 종속 변수 또는 예측 변수 라고 한다.
+- 예측을 위해 모형이 사용하는 속성을 독립 변수 또는 설명 변수라고 한다.
+
+선형회귀분석
+- from sklearn.linear_model import LinearRegression 
+- lr = LinearRegression()
+
+- 두 변수 사이에 일대일로 대응되는 확률적, 통계적 상관성을 찾는 알고리즘을 단순회귀분석
+대표적인 지도 학습 유형이다.
+Y = aX + b (X는 독립변수, Y는 종속변수)
+
+다항회귀분석
+- 두 변수간의 관계를 직선 형태로 설명하는 알고리즘이 단순회귀분석
+- 직선보다 곡선으로 설명하는것이 적합할 때가 있어 복잡한 곡선 형태의 회귀선을 표현가능
+- from sklearn.preprocessing import PolynomialFeatures   #다항식 변환
+- poly = PolynomialFeatures(degree=2)               #2차항 적용
+- X_train_poly=poly.fit_transform(X_train)     #X_train 데이터를 2차항으로 변형
+-> 이렇게 되면 X_train 의 1개의 열이 aX^2+bX+c 로 3개의 열로 변형
+
+# train data를 가지고 모형 학습
+pr = LinearRegression()
+pr.fit(X_train_poly, y_train)
+
+다중회귀분석
+- 여러개의 독립 변수가 종속 변수에 영햐을 주고 선형 관계를 갖는 경우에 다중회귀분석
+- Y = b + a1X1 + a2X2 + a3X3 + ... 
+ex)
+선형 회귀와 방식 동일
+
+# 속성(변수) 선택
+X=ndf[['cylinders', 'horsepower', 'weight']]  #독립 변수 X1, X2, X3
+y=ndf['mpg']     #종속 변수 Y
+
+분류
+- 예측 하려는 대상의 속성을 입력받고 목표 변수가 갖고 있는 카테고리 값 중에서
+어느 한 값으로 분류하여 예측한다. 목표 변수값을 함께 입력하기 때문에 지도 학습
+- 분류할때는 라벨인코딩, 원핫인코딩을 사용한다.
+- KNN, SVM, Decision Tree, Logistic Regression 등 다양한 알고리즘 존재
+- 여기서는 KNN, SVM, Decision Tree
+
+KNN
+- K-Nearest-Neighbors의 약칭
+- 새로운 관측값이 주어지면 기존 데이터주에서 가장 속성이 비슷한 k개의 이웃을 먼저 찾는다.
+- 가까운 이웃들이 갖고 있는 목표값과 같은 값으로 분류하여 예측
+- k개 값에 따라 예측의 정확도가 달라지므로 적절한 k값 찾는것이 매우 중요
+- prefix 옵션을 사용하여 새로 추가될 더미변수 열 이름에 접두어를 붙일 수 있다.
+
+분류모형의 예측력을 평가하는 지표
+1. Confusion Matrix
+- 모형이 예측하는 값에는 두가지(True, False)가 있고 각 예측 값은 실제로 True 또는 False
+이것을 2X2 매트릭스로 표현한 것을 Confusion Matrix 라고 부른다.
+
+2. 정확도(Precision)
+- True로 예측한 분석대상 중에서 실제로 True인 비율을 말한다.
+Precision = TP / (TP + FP)
+
+3. 재현율(Recall)
+- 실제 값이 True인 분석대상 중에서 True로 예측하여 모형이 적중한 비율을 말하며, 모형의
+완전성을 나타내는 지표, 재현율이 높다는 것은 실제 True를 False로 잘못예측 오류가 낮다는 뜻
+
+4. F1 지표
+- 정확도와 재현율이 균등하게 반영될 수 있도록 정확도와 재현율의 조화평균을 계산한 값
+- 모형의 예측력을 종합적으로 평가하는 지표, 값이 높을수록 모형의 예측력이 좋다고 말한다.
+F1 score = 2 * (Precision * Recall) / Precision + Recall
+
+- sklearn 라이브러리의 neighbors 모듈을 사용
+- KNeighborsClassifier() 함수로 KNN 분류 모형 객체 생산
+ex)
+# sklearn 라이브러리에서 KNN 분류 모형 가져오기
+from sklearn.neighbors import KNeighborsClassifier
+
+# 모형 객체 생성 (k=5로 설정)
+knn = KNeighborsClassifier(n_neighbors=5)
+
+# train data를 가지고 모형 학습
+knn.fit(X_train, y_train)
+
+# test data를 가지고 y_hat을 예측 (분류)
+y_hat = knn.predict(X_test)
+
+- metrics 모듈의 confusion_matrix() 함수를 사용하여 ConfusionMatrix 를 계산한다.
+ex)
+# 모형 성능 평가 - Confusion Matrix 계산
+from sklearn import metrics
+knn_matrix = metrics.confusion_matrix(y_test, y_hat)
+print(knn_matrix)
+
+- metrics 모듈의 classification_report() 함수를 사용하면 precision, recall, f1-score 지표 출력
+- 이거 이외에도 from sklearn.metrics import accuracy_score 사용 가능
+ex)
+# 모형 성능 평가 - 평가지표 계산
+knn_report = metrics.classification_report(y_test, y_hat)
+print(knn_report)
 
 
 
