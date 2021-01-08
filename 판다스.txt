@@ -5,6 +5,8 @@ https://www.zendesk.kr/blog/machine-learning-and-deep-learning/
 -> 머신러닝과 딥러닝의 차이
 https://www.youtube.com/watch?v=uM8pyX5Qb2w&list=PLaTc2c6yEwmq-3bSiCeaBJhE5Km5TKFhh&index=2
 -> Youtube 강의
+https://archive.ics.uci.edu/ml/machine-learning-databases/
+-> 머신러닝 학습 데이터
 
 import tensorflow._api.v2.compat.v1 as tf
 tf.disable_v2_behavior()
@@ -1929,6 +1931,115 @@ ex)
 # 모형 성능 평가 - 평가지표 계산
 knn_report = metrics.classification_report(y_test, y_hat)
 print(knn_report)
+
+SVM
+- SVM은 Support Vector Machine의 약자
+- 열 벡터들이 각각 고유의 축을 갖는 벡터공간을 만드는데, 분석대상이 되는 개별 관측값은
+모든 속성에 관한 값을 해당축의 좌표로 표시하여 벡터공간에서 위치를 나타낸다.
+속성(열 벡터)이 2개면 2차원 평면, 3개면 3차원 공간
+- sklearn에서 가져온 svm 모듈 SVC() 함수 사용
+- 데이터를 벡터 공간으로 매핑하는 함수를 커널이라 하는데 kernel='rbf' 옵션으로 
+Radial Basis Function 함수 적용
+- 이외에도 Linear, Polynimial, Sigmoid 등의 커널이 있다.
+ex)
+# sklearn 라이브러리에서 SVM 분류 모형 가져오기
+from sklearn import svm
+
+# 모형 객체 생성 (kernel='rbf' 적용)
+svm_model = svm.SVC(kernel='rbf')
+
+# train data를 가지고 모형 학습
+svm_model.fit(X_train, y_train)
+
+# test data를 가지고 y_hat을 예측 (분류)
+y_hat = svm_model.predict(X_test)
+
+# 모형 성능 평가 - 평가지표 계산
+svm_report = metrics.classification_report(y_test, y_hat)
+print(svm_report)
+
+Desicion Tree
+- 트리 구조를 사용하고 각 분기점(node)에서 분석 대상의 속성들이 위치한다.
+- 각 분기점 마다 목표값을 가장 잘 분류할 수 있는 속성을 찾아 배치, 해당 속성이 갖는 값을
+이용하여 새로운 가지(branch)를 만든다. 
+- 다른 종류의 값들이 섞여 있는 정도를 Entropy를 활용하여 나타낸다. 낮을수록 분류가 잘됨.
+
+모형 학습 및 검증
+- sklearn 라이브러리의 tree 모듈을 임포트 한다.
+- DecisionTreeClassifier() 함수를 사용하여 모형객체를 생성
+- 각 분기점에서 최적의 속성을 찾기위해 분류 정도를 평가하는 기준으로 'entropy'값 사용
+- tree 레벨을 5로 지정하는데, 5단계 까지 가지를 확장할 수 있다는 뜻
+- 레벨이 많아질수록 모형학습에 사용하는 훈련 데이터에 대한 예측은 정확해짐
+- 너무 지나치게 학습되면 예측능력이 떨어지므로 적정한 레벨값을 찾는것이 중요
+
+군집
+- 데이터셋의 관측값이 갖고 있는 여러 속성을 분석하여 서로 비슷한 특징값을 갖는 관측값
+끼리 같은 클러스터로 묶는 알고리즘
+- 군집분석은 비지도학습 유형이다. 관측값을 몇개의 집단으로 나눈다는 점에서 분류 알고리즘
+과 비슷하지만 군집 분석은 정답이 없는 상태에서 데이터 자체의 유사성만을 기준으로 판단
+차이가 있다.
+★비지도 학습 모형이므로 예측변수를 지정할 필요가 없고 필요한 속성을 모두 독립변수 사용
+-★같은 집단 내 다른소비자를 통해 새로운 소비자 구매 패턴 행동 예측에 사용
+- k-Means 알고리즘, DBSCAN 알고리즘 사용
+
+k-Means
+- 데이터 간의 유사성을 측정하는 기준으로 각 클러스터의 중심까지의 거리를 이용
+- 벡터공간에 위치한 어떤 데이터에 대하여 k개의 클러스터가 주어졌을 때 클러스터의
+중심까지의 거리가 가장 가까운 클러스터로 해당 데이터를 할당
+- 몇개의 클러스터로 데이터를 구분할 것인지 결정하는 k 값에 따라 모형 성능이 달라진다.
+- 일반적으로 k 클수록 모형의 정확도는 개선되지만 k 값이 너무 커지면 선택지가 너무 많아짐
+
+모형 학습 및 검증
+- sklearn 라이브러리의 cluster 모듈을 활용
+- KMeans() 함수로 모형객체를 생성, n_cluster 옵션을 사용하여 클러스터의 개수 5로 지정
+- 모형의 labels_속성 에 구분한 클러스터의 값이 입력되어 있다.
+ex)
+# sklearn 라이브러리에서 cluster 군집 모형 가져오기
+from sklearn import cluster
+
+# 모형 객체 생성
+kmeans = cluster.KMeans(init='k-means++', n_clusters=5, n_init=10)
+
+# 모형 학습
+kmeans.fit(X)
+
+# 예측 (군집)
+cluster_label = kmeans.labels_  #★★
+print(cluster_label)
+print('\n')
+
+# 예측 결과를 데이터프레임에 추가
+df['Cluster'] = cluster_label
+print(df.head())
+print('\n')
+
+DBSCAN
+- Density-Based Spatial clustering of Applications with Noise 은 데이터가 위치하고 있는 공간
+밀집도를 기준으로 클러스터를 구분한다.
+- 자기를 중심으로 반지름 R의 공간에 최소 M개의 포인트가 존재하는 점을 코어포인트.
+- 코어 포인트는 아니지만 반지름 R안에 다른 코어 포인트가 있을 경우 경계포인트
+- 코어 포인트도 아니고 경계 포인트에도 속하지 않는 점을 Noise
+- 하나의 클러스터는 반지름 R 안에 서로 위치하는 모든 코어 포인트를 포함하는 방식으로 구성
+
+모형 학습 및 검증
+- 우선 StandardScaler() 메소드로 표준화 처리
+- DBSCAN() 함수를 적용하여 모형객체 생성
+- 밀도 계산의 기준이 되는 반지름 R(eps=0.2)과 최소 포인트 개수M(min_samples=5)을 옵션에
+설정
+ex)
+# 설명 변수 데이터를 정규화
+X = preprocessing.StandardScaler().fit(X).transform(X)
+
+# DBSCAN 모형 객체 생성
+dbm = cluster.DBSCAN(eps=0.2, min_samples=5)
+
+# 모형 학습
+dbm.fit(X)
+
+# 예측 (군집)
+cluster_label = dbm.labels_
+print(cluster_label)
+
 
 
 
